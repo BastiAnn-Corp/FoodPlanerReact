@@ -1,3 +1,5 @@
+import {DocumentData} from "@firebase/firestore";
+
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
   ? Acc[number]
   : Enumerate<N, [...Acc, Acc['length']]>
@@ -12,7 +14,7 @@ export interface IFoodFamily {
   subcategories?: IFoodFamily[]
 }
 
-interface IShoppingAisle{
+export interface IShoppingAisle extends DocumentData{
   id: string;
   aisle: string;
 }
@@ -22,7 +24,7 @@ interface IConvertionIngredients {
   quantity: number;
 }
 
-export interface IIngredient{
+export interface IIngredient extends DocumentData{
   id: string;
   name: string;
   aisle: string;
@@ -47,7 +49,7 @@ export interface IRecipeIngredient {
   quantity: number;
 }
 
-export interface IRecipe{
+export interface IRecipe extends DocumentData{
   id:string;
   name: string;
   portions: number;
@@ -65,7 +67,7 @@ export interface IDayMenu {
   dessert: IRecipe | IIngredient
 }
 
-export interface IMenu {
+export interface IMenu extends DocumentData {
   id: string;
   number: number;
   persons: number;
