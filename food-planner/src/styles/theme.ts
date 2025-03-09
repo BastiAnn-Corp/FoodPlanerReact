@@ -1,6 +1,17 @@
-import {createTheme} from "@mui/material";
+"use client"
+import { Roboto } from 'next/font/google';
+import {createTheme} from "@mui/material/styles";
 
-export const darkTheme = createTheme({
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+export const theme = createTheme({
+  typography: {
+    fontFamily: roboto.style.fontFamily,
+  },
   palette: {
     mode: 'dark',
     primary: {
