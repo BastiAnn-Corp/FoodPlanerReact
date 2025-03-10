@@ -11,21 +11,22 @@ type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumer
 export interface IFoodFamily {
   name: string;
   id: string;
+  icon?: string;
   subcategories?: IFoodFamily[]
 }
 
 export interface IShoppingAisle extends DocumentData{
-  id: string;
+  id?: string;
   aisle: string;
 }
 
-interface IConvertionIngredients {
+export interface IConvertionIngredients {
   unit: string;
   quantity: number;
 }
 
 export interface IIngredient extends DocumentData{
-  id: string;
+  id?: string;
   name: string;
   aisle: string;
   grams_per_unit?: number;
@@ -38,9 +39,9 @@ export interface IRecipeStep{
   sc_time_in_seconds?: number;
   sc_temp_in_celcius?: IntRange<0, 120>;
   sc_speed?: 1|2|3|4|5|6|7|8|9;
-  pot_program: string;
-  pot_time_mìnutes: number;
-  pot_temp: 1 | 2 | 3;
+  pot_program?: string;
+  pot_time_minutes?: number;
+  pot_temp?: 1 | 2 | 3;
 }
 
 export interface IRecipeIngredient {
@@ -50,7 +51,7 @@ export interface IRecipeIngredient {
 }
 
 export interface IRecipe extends DocumentData{
-  id:string;
+  id?:string;
   name: string;
   portions: number;
   seasons: string[];
@@ -68,7 +69,7 @@ export interface IDayMenu {
 }
 
 export interface IMenu extends DocumentData {
-  id: string;
+  id?: string;
   number: number;
   persons: number;
   seasons: string[];

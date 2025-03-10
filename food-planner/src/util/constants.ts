@@ -4,18 +4,22 @@ export const seasons = [
   {
     key: "summer",
     name: "Verano",
+    color: "error"
   },
   {
     key: "winter",
     name: "Invierno",
+    color: "info"
   },
   {
     key: "spring",
     name: "Primavera",
+    color: "success"
   },
   {
     key: "autum",
     name: "Otoño",
+    color: "warning"
   }
 ]
 
@@ -23,44 +27,47 @@ export const foodFamilies: IFoodFamily[] = [
   {
     name: "Sopas y Cremas",
     id: "starters",
+    icon: "🥣"
   },
   {
     name: "Verduras",
     id: "veggies",
+    icon: "🥗"
   },
   {
     name: "Carbohidratos",
     id: "carbs",
+    icon: "🍚"
   },
   {
-    name: "Proteinas",
-    id: "proteins",
-    subcategories: [
-      {
-        name: "Pescados y Mariscos",
-        id: "fish",
-      },
-      {
-        name: "Aves",
-        id: "birds",
-      },
-      {
-        name: "Carnes",
-        id: "meat",
-      },
-      {
-        name: "Beans",
-        id: "beans",
-      },
-    ]
+    name: "Pescados y Mariscos",
+    id: "fish",
+    icon: "🐟"
+  },
+  {
+    name: "Aves",
+    id: "birds",
+    icon: "🐓",
+  },
+  {
+    name: "Carnes",
+    id: "meat",
+    icon: "🐮"
+  },
+  {
+    name: "Legumbres",
+    id: "beans",
+    icon: "🌱"
   },
   {
     name: "Postres",
     id: "desserts",
+    icon: "🍓"
   },
   {
     name: "Otro",
     id: "others",
+    icon: "🍽️"
   },
 ]
 
