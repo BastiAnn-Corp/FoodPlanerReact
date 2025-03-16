@@ -1,15 +1,16 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {IRecipeIngredient} from "@/util/models";
 import {Avatar, IconButton, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 
+interface ItemRecipeIngredientProps {
+  ingredient: IRecipeIngredient,
+  editable?: boolean,
+  saveIngredient?: (ingredient: IRecipeIngredient) => void,
+}
 export function ItemRecipeIngredient(
-  { ingredient, editable, saveIngredient = ()=>{} } : {
-    ingredient: IRecipeIngredient,
-    editable: boolean,
-    saveIngredient: Function
-  }
+  { ingredient, editable = false, saveIngredient = ()=>{} } : ItemRecipeIngredientProps
 ) {
   const [quantity, setQuantity] = useState<number>(ingredient.quantity || 0);
   const [quantityUnit, setQuantityUnit] = useState<string>(ingredient.quantity_unit || "Unidad");

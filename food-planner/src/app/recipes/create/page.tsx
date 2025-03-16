@@ -1,11 +1,11 @@
 import React from "react";
 import {RecipeForm} from "@/components/recipeForm";
-import {Container} from "@mui/material";
+import {Base} from "@/components/Base";
 
 export default function CreateRecipes() {
   return (
-    <Container maxWidth={"md"}>
+    <Base>
       <RecipeForm save={false}/>
-    </Container>
+    </Base>
     );
 }

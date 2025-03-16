@@ -1,4 +1,13 @@
-import {IFoodFamily} from "@/util/models";
+import {ICategory} from "@/util/models";
+
+export type TSeasons = "summer" | "winter" | "spring" | "autum"
+export type TFoodFamily = "starters" | "veggies" | "carbs" |
+  "fish" | "birds" | "meat" | "beans" | "desserts" | "bakery" |
+  "others"
+export type TPotProgram = 'asar' | 'vaporera' | 'airfryer' | 'sofrito' | 'sopa' | 'hervir' | 'coxionlenta'
+export type TAisle = "lacteos-y-quesos"| "frutas-y-verduras" | "carniceria" | "fiambreria-y-encurtidos" | "pescaderia" |
+  "bebidas-aguas-y-jugos" | "congelados" | "despensa" | "snack-dulces" | "panaderia-y-pasteleria" |
+  "snack salados" | "botilleria" | "none"
 
 export const seasons = [
   {
@@ -23,7 +32,7 @@ export const seasons = [
   }
 ]
 
-export const foodFamilies: IFoodFamily[] = [
+export const foodFamilies: ICategory[] = [
   {
     name: "Sopas y Cremas",
     id: "starters",
@@ -65,13 +74,18 @@ export const foodFamilies: IFoodFamily[] = [
     icon: "🍓"
   },
   {
+    name: "Pastelería",
+    id: "bakery",
+    icon: "🍰"
+  },
+  {
     name: "Otro",
     id: "others",
     icon: "🍽️"
   },
 ]
 
-export const potPrograms: IFoodFamily[] = [
+export const potPrograms: ICategory[] = [
   {
     name: 'Asar',
     id: 'asar'
@@ -84,5 +98,82 @@ export const potPrograms: IFoodFamily[] = [
   },{
     name: 'Sofrito',
     id: 'sofrito'
+  },{
+    name: 'Sopa',
+    id: 'sopa'
+  },{
+    name: 'Hervir',
+    id: 'hervir'
+  },{
+    name: 'Cocción Lenta',
+    id: 'coxionlenta'
   }
+]
+
+export const marketAisles: ICategory[] = [
+  {
+    name: "Lácteos y Quesos",
+    id: "lacteos-y-quesos",
+    icon: "🧀",
+  },
+  {
+    name: "Frutas y Verduras",
+    id: "frutas-y-verduras",
+    icon: "🥕",
+  },
+  {
+    name: "Carnicería",
+    id: "carniceria",
+    icon: "🥩",
+  },
+  {
+    name: "Fiambreria y Encurtidos",
+    id: "fiambreria-y-encurtidos",
+    icon: "🍖",
+  },
+  {
+    name: "Pescaderia",
+    id: "pescaderia",
+    icon: "🐟",
+  },
+  {
+    name: "Bebidas, Aguas y Jugos",
+    id: "bebidas-aguas-y-jugos",
+    icon: "🧃",
+  },
+  {
+    name:"Congelados",
+    id:"congelados",
+    icon:"❄️",
+  },
+  {
+    name:"Despensa",
+    id:"despensa",
+    icon:"🥫",
+  },
+  {
+    name:"Panaderia y Pasteleria",
+    id:"panaderia-y-pasteleria",
+    icon:"🍞",
+  },
+  {
+    name:"Snack Dulces",
+    id:"snack-dulces",
+    icon:"🍫",
+  },
+  {
+    name:"Snack Salados",
+    id:"snack salados",
+    icon:"🍟",
+  },
+  {
+    name:"Botilleria",
+    id:"botilleria",
+    icon:"🍾",
+  },
+  {
+    name:"Sin categoría",
+    id:"none",
+    icon:"🛒",
+  },
 ]

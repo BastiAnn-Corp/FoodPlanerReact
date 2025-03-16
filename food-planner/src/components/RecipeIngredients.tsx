@@ -4,12 +4,13 @@ import {IRecipeIngredient} from "@/util/models";
 import {List} from "@mui/material";
 import {ItemRecipeIngredient} from "@/components/ItemRecipeIngredient";
 
+interface RecipeIngredientsProps {
+  ingredients: IRecipeIngredient[];
+  editable?: boolean;
+  saveIngredients?: (listOfIngredients: IRecipeIngredient[]) => void;
+}
 export function RecipeIngredients(
-  { ingredients, editable, saveIngredients = ()=>{} } : {
-    ingredients: IRecipeIngredient[],
-    editable: boolean,
-    saveIngredients: Function
-  }
+  { ingredients, editable = false, saveIngredients = ()=>{} } : RecipeIngredientsProps
 ) {
   function addIngredient(ingredient: IRecipeIngredient) {
     const items = ingredients

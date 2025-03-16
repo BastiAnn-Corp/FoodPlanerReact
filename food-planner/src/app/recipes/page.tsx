@@ -3,17 +3,17 @@ import React, {useEffect} from "react";
 import {
   Button, Chip,
   CircularProgress,
-  Container,
   Grid2,InputAdornment,
   List,
  TextField,
   Typography
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
-import {getRecipes, IFilterRecipes} from "@/lib/firebase/firestore";
 import {IRecipe} from "@/util/models";
 import {ItemRecipe} from "@/components/ItemRecipe";
 import {foodFamilies, seasons} from "@/util/constants";
+import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
+import {Base} from "@/components/Base";
 
 export default function Recipes() {
   const [recipes, setRecipes] = React.useState<IRecipe[]>([]);
@@ -23,9 +23,9 @@ export default function Recipes() {
   const [filterFamily, setFilterFamily] = React.useState<string>("");
   useEffect(()=>{
     if (recipes.length == 0 && filterName == "" && filterSeason == "" && filterFamily == "") {
-      loadRecipes()
+
     }
-  },[filterSeason, filterFamily, recipes])
+  },[recipes])
 
   async function loadRecipes() {
     const filters: IFilterRecipes = {}
@@ -73,7 +73,7 @@ export default function Recipes() {
     })
   }
 
-  return (<Container maxWidth={"md"}>
+  return (<Base>
     <Grid2 container spacing={1} padding={1} justifyContent={"space-between"}>
       <Grid2 size={4}>
         <Typography variant={"h3"}> Recetas </Typography>
@@ -128,5 +128,5 @@ export default function Recipes() {
         </List>
       </Grid2>
     </Grid2>
-  </Container>);
+  </Base>);
 }

@@ -1,5 +1,5 @@
 "use client"
-import {IFoodFamily, IRecipe} from "@/util/models";
+import {ICategory, IRecipe} from "@/util/models";
 import React from "react";
 import {Avatar, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
 import {ChevronRightRounded} from "@mui/icons-material";
@@ -12,7 +12,7 @@ export function ItemRecipe(
   }
 ) {
   const {family, name,portions} = recipe
-  function familyEmoji(): IFoodFamily{
+  function familyEmoji(): ICategory{
     const item = foodFamilies.find((item) => item.id === family)
     if (!item){
       return {
