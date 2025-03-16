@@ -1,6 +1,6 @@
 import {TAisle} from "@/util/constants";
-import {IIngredient} from "@/util/models";
-import {addDoc, collection, query, Query, where} from "@firebase/firestore";
+import {IConvertionIngredients, IIngredient} from "@/util/models";
+import {addDoc, collection, FirestoreError, query, Query, where} from "@firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {getConvertedDocs} from "@/lib/firebase/firestore";
 
@@ -40,40 +40,42 @@ export async function getIngredients({
 export interface ICreateIngredient{
   name: string;
   aisles: TAisle[];
-  quantity: number;
-  quantityUnit: string;
+  convertions: IConvertionIngredients[];
 }
 
-export async function createIngredient(args: ICreateIngredient){
+export interface createDocOutput {
+  data: string | null,
+  error?: string
+}
+
+export async function createIngredient(args: ICreateIngredient): Promise<createDocOutput>{
   try {
     const {
       name,
-      quantity,
       aisles,
-      quantityUnit,
+      convertions
     } = args
     const ingredients = await getIngredients({name: name.toLowerCase()})
     const ingredientExists = ingredients.findIndex((item)=> item.name === name.toLowerCase())
     if (ingredientExists !== -1){
-      return ingredients[ingredientExists].id
+      return { data: ingredients[ingredientExists].id as string}
     }
     const data: IIngredient = {
       aisles,
       name: name.toLowerCase(),
-      convertions: [
-        {
-          quantity,
-          unit: quantityUnit.toLowerCase(),
-        }
-      ]
+      convertions
     }
     const docRef = await addDoc(
       collection(firestoreDB, collName),
       data
     )
-    return docRef.id;
+    return {data: docRef.id};
   } catch (error) {
     console.log(error);
-    return null
+    const err = error as FirestoreError;
+    return {
+      data: null,
+      error: `${err.name}: ${err.message}`,
+    }
   }
 }

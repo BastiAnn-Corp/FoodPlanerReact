@@ -9,6 +9,8 @@ export type TAisle = "lacteos-y-quesos"| "frutas-y-verduras" | "carniceria" | "f
   "bebidas-aguas-y-jugos" | "congelados" | "despensa" | "snack-dulces" | "panaderia-y-pasteleria" |
   "snack salados" | "botilleria" | "none"
 
+export type TMeasureUnits = "unidad" | "grs" | "ml" | "kg" | "lt" | "cdta" | "cda" | "tz"
+
 export const seasons = [
   {
     key: "summer",
@@ -176,4 +178,39 @@ export const marketAisles: ICategory[] = [
     id:"none",
     icon:"🛒",
   },
+]
+
+export const measuerementUnits: ICategory[] = [
+  {
+    name: "Unidad",
+    id: "unidad",
+  },
+  {
+    name: "Gramos",
+    id: "grs",
+  },
+  {
+    name: "Mililitro",
+    id: "ml",
+  },
+  {
+    name: "Kilogramo",
+    id: "kg",
+  },
+  {
+    name: "Litro",
+    id: "lt",
+  },
+  {
+    name: "Cucharadita",
+    id: "cdta",
+  },
+  {
+    name: "Cucharada",
+    id: "cda"
+  },
+  {
+    name: "Taza",
+    id: "tz"
+  }
 ]

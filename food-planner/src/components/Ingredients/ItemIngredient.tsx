@@ -36,15 +36,19 @@ export function ItemIngredient(props: ItemIngredientProps) {
     }
   >
     <ListItemText
-      primary={name}
-      secondary={`${convertions.map(({unit, quantity})=>{
-        return `${quantity} ${unit} = `
-      })}`}
+      primary={name + ` (1 unidad ${convertions.map(({unit, quantity})=>{
+        return `/ ${quantity} ${unit} `
+      })})`}
+      secondary={aisles ? aisles.map((aisle,i)=> {
+          const item = getAisleDetail(aisle)
+          return <Chip variant={"outlined"} size={"small"} label={`${item.icon} ${item.name}`} key={`${id}-aisle-${i}`}/>
+        }) : (<Chip
+        size={"small"}
+        variant={"outlined"}
+        label={"Sin pasillo asignado"}
+        disabled
+      />)}
     >
-      {aisles.length > 0 ? aisles.map((aisle,i)=> {
-        const item = getAisleDetail(aisle)
-        return <Chip size={"small"} label={`${item.icon} ${item.name}`} key={`${id}-aisle-${i}`}/>
-      }) : (<Chip size={"small"} label={"Sin pasillo asignado"}/>)}
     </ListItemText>
   </ListItem>)
 }

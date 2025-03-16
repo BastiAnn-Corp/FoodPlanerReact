@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {IIngredient,} from "@/util/models";
 import {marketAisles, TAisle} from "@/util/constants";
 import {getIngredients, IFilterIngredients} from "@/lib/firebase/ingredients";
@@ -16,18 +16,20 @@ import {
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {ItemIngredient} from "@/components/Ingredients/ItemIngredient";
 import {Base} from "@/components/Base";
+import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
+import {set} from "@firebase/database";
 
 export default function Ingredients(){
   const [ingredients,setIngredients] = React.useState<IIngredient[]>([]);
   const [filterName, setFilterName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [filterAisle, setFilterAisle] = React.useState<TAisle | "">("");
-
+  const [addIngredient, setAddIngredient] = useState<boolean>(false)
   useEffect(()=>{
-    if (filterName == "" && filterAisle.length == 0) {
-
+    if (ingredients.length === 0 && filterName == "" && filterAisle.length == 0 && !addIngredient) {
+      load()
     }
-  },[ingredients])
+  },[ingredients, addIngredient])
 
   async function load() {
     const filters: IFilterIngredients = {}
@@ -70,10 +72,11 @@ export default function Ingredients(){
           variant={"contained"}
           startIcon={<AddCircle/>}
           size={"small"}
+          onClick={()=>{setAddIngredient(true)}}
           fullWidth
-          href={'/ingredients/create'}
         >Nuevo Ingrediente</Button>
       </Grid2>
+      <ModalAddIngredient isOpen={addIngredient} handleClose={()=>{setAddIngredient(false)}}/>
     </Grid2>
     <Grid2 container spacing={2} direction={"column"}>
       <Grid2>
