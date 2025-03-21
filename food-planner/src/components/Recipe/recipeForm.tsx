@@ -2,24 +2,31 @@
 import React, {useEffect, useState} from "react";
 import {Button, Divider, Grid2, MenuItem, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import {foodFamilies, seasons} from "@/util/constants";
-import {IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {RecipeIngredients} from "@/components/RecipeIngredients";
-import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {IIngredient, IRecipeIngredient, IRecipeStep} from "@/util/models";
+import {RecipeIngredients} from "@/components/Recipe/RecipeIngredients";
+import { AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {getIngredients} from "@/lib/firebase/ingredients";
 
-export function RecipeForm({save}: {save: boolean}) {
+export function RecipeForm() {
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
   const [recipeName, setRecipeName] = useState<string>("")
   const [recipeType, setRecipeType] = useState<string>("")
   const [recipePortions, setRecipePortions] = useState<number>(4)
 
+  const [rawIngredients, setRawIngredients] = useState<IIngredient[]>([]);
   const [listOfIngredients, setListOfIngredients] = useState<IRecipeIngredient[]>([])
   const [showIgredients, setShowIgredients] = useState(false)
   const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([])
   const [showSteps, setShowSteps] = useState(false)
 
   useEffect(()=>{
-    // TODO save recipe
-  }, [save])
+    loadRawIngredients().then()
+  }, [])
+
+  async function loadRawIngredients (){
+    const result = await getIngredients({})
+    setRawIngredients(result)
+  }
 
   const handleType = (event: SelectChangeEvent<string>) => {
     const {
@@ -112,13 +119,7 @@ export function RecipeForm({save}: {save: boolean}) {
         ingredients={listOfIngredients}
         editable={true}
         saveIngredients={setListOfIngredients}
-      />
-      <Button
-        color={"secondary"}
-        variant={"outlined"}
-        startIcon={<AddCircle/>}
-      >Agregar ingrediente</Button>
-
+       baseIngredients={rawIngredients}/>
     </Grid2>) : (<></>)}
     <Divider/>
     <Grid2 size={12}>

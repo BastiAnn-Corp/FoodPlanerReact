@@ -1,5 +1,5 @@
 import React from "react";
-import {RecipeForm} from "@/components/recipeForm";
+import {RecipeForm} from "@/components/Recipe/recipeForm";
 import {Base} from "@/components/Base";
 
 export default function CreateRecipes() {

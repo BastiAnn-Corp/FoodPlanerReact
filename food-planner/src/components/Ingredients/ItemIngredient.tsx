@@ -1,6 +1,6 @@
 import {ICategory, IIngredient} from "@/util/models";
-import { Chip, IconButton, ListItem, ListItemText} from "@mui/material";
-import {Delete} from "@mui/icons-material";
+import {Checkbox, Chip, ListItem, ListItemText} from "@mui/material";
+import {Edit} from "@mui/icons-material";
 import React from "react";
 import {marketAisles, TAisle} from "@/util/constants";
 
@@ -8,6 +8,8 @@ interface ItemIngredientProps {
   ingredient: IIngredient;
   editable?: boolean;
   index?: number;
+  selected?: boolean;
+  select?:(i:IIngredient) => void
 }
 
 export function ItemIngredient(props: ItemIngredientProps) {
@@ -28,11 +30,29 @@ export function ItemIngredient(props: ItemIngredientProps) {
     }
   }
 
+  const defaultStartIcon = <></>
+
+  const renderSelection = () => {
+    return props.select ?
+      <Checkbox
+        checked={props.selected}
+        onClick={()=>{props.select!(props.ingredient)}}
+      />
+      : defaultStartIcon
+  }
+
+  const renderEdition = () => {
+    return props.editable ?
+      <Edit
+        onClick={()=>{}}
+      />
+      : defaultStartIcon
+  }
+
   return (<ListItem
-    secondaryAction={props.editable ?
-      <IconButton edge="end" aria-label="delete">
-        <Delete/>
-      </IconButton> : <></>
+    divider={true}
+    secondaryAction={
+      props.select ? renderSelection() : renderEdition()
     }
   >
     <ListItemText

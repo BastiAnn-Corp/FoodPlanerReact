@@ -17,7 +17,6 @@ import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {ItemIngredient} from "@/components/Ingredients/ItemIngredient";
 import {Base} from "@/components/Base";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
-import {set} from "@firebase/database";
 
 export default function Ingredients(){
   const [ingredients,setIngredients] = React.useState<IIngredient[]>([]);

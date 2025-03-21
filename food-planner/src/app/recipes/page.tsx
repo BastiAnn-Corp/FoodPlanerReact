@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
-import {ItemRecipe} from "@/components/ItemRecipe";
+import {ItemRecipe} from "@/components/Recipe/ItemRecipe";
 import {foodFamilies, seasons} from "@/util/constants";
 import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
 import {Base} from "@/components/Base";
