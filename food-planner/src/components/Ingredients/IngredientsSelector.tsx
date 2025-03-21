@@ -16,6 +16,7 @@ export function IngredientsSelector({
 
   return (<Autocomplete
     fullWidth
+    size={"small"}
     value={selected}
     onChange={(event, newValue) => {
       select(newValue);

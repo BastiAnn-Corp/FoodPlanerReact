@@ -4,8 +4,9 @@ import {Button, Divider, Grid2, MenuItem, Select, SelectChangeEvent, TextField, 
 import {foodFamilies, seasons} from "@/util/constants";
 import {IIngredient, IRecipeIngredient, IRecipeStep} from "@/util/models";
 import {RecipeIngredients} from "@/components/Recipe/RecipeIngredients";
-import { AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
+import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
 
 export function RecipeForm() {
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
@@ -14,18 +15,34 @@ export function RecipeForm() {
   const [recipePortions, setRecipePortions] = useState<number>(4)
 
   const [rawIngredients, setRawIngredients] = useState<IIngredient[]>([]);
+  const [addRawIngredient, setAddRawIngredient] = useState<boolean>(false);
+
   const [listOfIngredients, setListOfIngredients] = useState<IRecipeIngredient[]>([])
   const [showIgredients, setShowIgredients] = useState(false)
   const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([])
   const [showSteps, setShowSteps] = useState(false)
 
   useEffect(()=>{
+    if (addRawIngredient)
     loadRawIngredients().then()
-  }, [])
+  }, [addRawIngredient])
+
+  useEffect(()=>{
+
+  }, [listOfIngredients])
 
   async function loadRawIngredients (){
     const result = await getIngredients({})
     setRawIngredients(result)
+  }
+
+  const handleIngredients = (ing: IRecipeIngredient) => {
+    const filtered = listOfIngredients.filter(
+      ({ingredient}) => ingredient.name !== ing.ingredient.name)
+    if (filtered.length === listOfIngredients.length) {
+      filtered.push(ing)
+    }
+    setListOfIngredients(filtered);
   }
 
   const handleType = (event: SelectChangeEvent<string>) => {
@@ -44,11 +61,14 @@ export function RecipeForm() {
     );
   };
 
-  return (<Grid2 spacing={4} direction={"column"} padding={5} container>
-    <Typography variant={"h3"} color={"primary"}>
-      Nueva Receta
-    </Typography>
-    <Grid2>
+  return (<Grid2 spacing={4} direction={"row"} padding={5} justifyContent={"space-around"} container>
+    <Grid2 size={12}>
+      <Typography variant={"h3"} color={"primary"}>
+        Nueva Receta
+      </Typography>
+    </Grid2>
+
+    <Grid2 size={6}>
       <Typography>Nombre de receta</Typography>
       <TextField
         type={"text"}
@@ -58,7 +78,7 @@ export function RecipeForm() {
         onChange={({target})=>{setRecipeName(target.value)}}
       />
     </Grid2>
-    <Grid2>
+    <Grid2 size={6}>
       <Typography>Estaciones</Typography>
       <Select variant={"outlined"}
               fullWidth
@@ -71,7 +91,7 @@ export function RecipeForm() {
         ))}
       </Select>
     </Grid2>
-    <Grid2>
+    <Grid2 size={8}>
       <Typography>Tipo de receta</Typography>
       <Select variant={"outlined"} fullWidth
               value={recipeType}
@@ -82,9 +102,10 @@ export function RecipeForm() {
         ))}
       </Select>
     </Grid2>
-    <Grid2>
+    <Grid2 size={4}>
       <Typography>Porciones</Typography>
       <TextField
+        fullWidth
         type={"number"}
         variant={"outlined"}
         value={recipePortions.toString()}
@@ -93,8 +114,7 @@ export function RecipeForm() {
         }}
       />
     </Grid2>
-    <Divider/>
-    <Grid2 container spacing={2}>
+    <Grid2 container spacing={2} size={12}>
       <Grid2 size={6}>
         <Button
           color={"secondary"}
@@ -114,12 +134,24 @@ export function RecipeForm() {
       </Grid2>
     </Grid2>
     {showIgredients ? (<Grid2>
-      <Typography variant={"h4"}>Lista de ingredientes</Typography>
+      <Grid2>
+        <Typography variant={"h4"}>Lista de ingredientes
+
+        </Typography>
+      </Grid2>
+      <Grid2 >
+        <ModalAddIngredient isOpen={addRawIngredient} handleClose={()=>{setAddRawIngredient(false); loadRawIngredients()}}/>
+        <Typography variant={"caption"} color={"textDisabled"}>
+          Tu ingredeinte no esta en la lista? Agregalo aquí <AddCircle
+            onClick={()=>setAddRawIngredient(true)}
+          />
+        </Typography>
+      </Grid2>
       <RecipeIngredients
         ingredients={listOfIngredients}
         editable={true}
-        saveIngredients={setListOfIngredients}
-       baseIngredients={rawIngredients}/>
+        saveIngredient={handleIngredients}
+        baseIngredients={rawIngredients}/>
     </Grid2>) : (<></>)}
     <Divider/>
     <Grid2 size={12}>
@@ -127,6 +159,11 @@ export function RecipeForm() {
         fullWidth
         size={"large"}
         variant={"contained"}
+        disabled={
+          recipeName === "" || selectedSeasons.length === 0 ||
+          recipeType === "" || listOfIngredients.length === 0 ||
+          listOfSteps.length === 0
+        }
       >Guardar receta</Button>
     </Grid2>
   </Grid2>)

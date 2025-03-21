@@ -52,7 +52,10 @@ export function convertionsOnIngredient({
   let convertionRate: number = 1
   if (convertionBase){
     convertionRate = convertionBase.quantity / quantityInput
+  } else if (measurementUnitInput === "unidad") {
+    convertionRate = quantityInput
   }
+
   const otherConvertions = ingredientConvertions.filter(
     (item)=> item.unit !== measurementUnitInput
   );

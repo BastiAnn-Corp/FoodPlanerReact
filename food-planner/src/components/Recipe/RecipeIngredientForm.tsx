@@ -37,7 +37,7 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
 
   return (<Grid2 container direction={"row"} spacing={2}>
     <Grid2 size={12}>
-      <Typography variant={"caption"}>Elije nuevo ingrediente para la receta:</Typography>
+      <Typography variant={"caption"}>Elije ingrediente para la receta:</Typography>
       <IngredientsSelector
         ingredients={props.ingredients}
         selected={ingredient}
@@ -48,6 +48,7 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
       <Typography variant={"caption"}>Cantidad</Typography>
       <TextField
         fullWidth
+        size={"small"}
         value={quantity}
         type={"number"}
         onChange={(e)=>{setQuantity(Number(e.target.value))}}
@@ -58,6 +59,7 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
       <Typography variant={"caption"}>Medida</Typography>
     <Select
       fullWidth
+      size={"small"}
        value={unit}
        onChange={(e)=>{setUnit(e.target.value as TMeasureUnits)}}
        disabled={ingredient === null}
@@ -71,11 +73,15 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
       })}
     </Select>
     </Grid2>
-    <Grid2 size={6}>
+    <Grid2 size={12}>
   <Button
+    fullWidth
+    size={"small"}
+    variant={"contained"}
+    color={"secondary"}
     onClick={()=>{handleSave()}}
     disabled={quantity === 0 && unit === null && ingredient === null}
-  >Guardar ingrediente</Button>
+  >Agregar ingrediente a la lista</Button>
     </Grid2>
   </Grid2>)
 }

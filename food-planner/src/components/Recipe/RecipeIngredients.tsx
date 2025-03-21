@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, {useEffect} from "react";
 import {IIngredient, IRecipeIngredient} from "@/util/models";
 import {Grid2, List} from "@mui/material";
 import {ItemRecipeIngredient} from "@/components/Recipe/ItemRecipeIngredient";
@@ -9,17 +9,16 @@ interface RecipeIngredientsProps {
   ingredients: IRecipeIngredient[];
   baseIngredients: IIngredient[];
   editable?: boolean;
-  saveIngredients?: (listOfIngredients: IRecipeIngredient[]) => void;
+  saveIngredient?: (listOfIngredient: IRecipeIngredient) => void;
 }
 export function RecipeIngredients(
-  { ingredients, baseIngredients = [], editable=false,  saveIngredients } : RecipeIngredientsProps
+  { ingredients, baseIngredients = [], editable=false,  saveIngredient } : RecipeIngredientsProps
 ) {
+  useEffect(()=>{},[ingredients, baseIngredients]);
 
   function addIngredient(ingredient: IRecipeIngredient) {
-    const items = ingredients
-    items.push(ingredient)
-    if (editable && saveIngredients) {
-      saveIngredients(items)
+    if (editable && saveIngredient) {
+      saveIngredient(ingredient)
     }
   }
 
@@ -35,7 +34,9 @@ export function RecipeIngredients(
       ingredients.map((ingredient,index)=>{
         return (<ItemRecipeIngredient
           key={`recipe-ingredient-${index}`}
+          index={index}
           ingredient={ingredient}
+          deleteIngredient={addIngredient}
         />)
       })
     }</List>

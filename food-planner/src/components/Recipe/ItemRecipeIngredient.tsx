@@ -1,17 +1,18 @@
 "use client"
 import React from "react";
 import {IRecipeIngredient} from "@/util/models";
-import {Avatar, IconButton, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import {IconButton, ListItem, ListItemText} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import {TMeasureUnits} from "@/util/constants";
 import {convertionsOnIngredient} from "@/util/convertions";
 
 interface ItemRecipeIngredientProps {
   ingredient: IRecipeIngredient,
+  index:number;
   deleteIngredient?: (ingredient: IRecipeIngredient) => void,
 }
 export function ItemRecipeIngredient(
-  { ingredient, deleteIngredient } : ItemRecipeIngredientProps
+  { ingredient, deleteIngredient, index } : ItemRecipeIngredientProps
 ) {
 
   const primaryText = () => {
@@ -26,19 +27,19 @@ export function ItemRecipeIngredient(
       quantityInput: quantity,
       ingredientConvertions: ing.convertions
     })
-    return convetionsTexts.join(' / ')
+    return convetionsTexts.map(({quantity, unit})=>{
+      return `${quantity} ${unit}`
+    }).flat().join(' / ')
   }
 
   return (<ListItem
+    divider
     secondaryAction={deleteIngredient ?
       <IconButton edge="end" aria-label="delete" onClick={()=>{deleteIngredient(ingredient)}}>
         <Delete/>
       </IconButton> : <></>
     }
   >
-    <ListItemAvatar>
-      <Avatar title={ingredient.quantity.toString()}/>
-    </ListItemAvatar>
     <ListItemText primary={primaryText()} secondary={secondaryText()} />
   </ListItem>)
 }
