@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Divider, Grid2, MenuItem, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import {foodFamilies, seasons} from "@/util/constants";
 import {IIngredient, IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {RecipeIngredients} from "@/components/Recipe/RecipeIngredients";
+import {RecipeIngredients} from "@/components/Recipe/Ingredients/RecipeIngredients";
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";

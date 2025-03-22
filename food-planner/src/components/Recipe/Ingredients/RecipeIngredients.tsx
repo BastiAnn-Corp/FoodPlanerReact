@@ -2,8 +2,8 @@
 import React, {useEffect} from "react";
 import {IIngredient, IRecipeIngredient} from "@/util/models";
 import {Grid2, List} from "@mui/material";
-import {ItemRecipeIngredient} from "@/components/Recipe/ItemRecipeIngredient";
-import {RecipeIngredientForm} from "@/components/Recipe/RecipeIngredientForm";
+import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
+import {RecipeIngredientForm} from "@/components/Recipe/Ingredients/RecipeIngredientForm";
 
 interface RecipeIngredientsProps {
   ingredients: IRecipeIngredient[];
