@@ -7,8 +7,18 @@ import {RecipeIngredients} from "@/components/Recipe/Ingredients/RecipeIngredien
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
+import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
 
 export function RecipeForm() {
+  const dummyStep: IRecipeStep = {
+    instructions: 'Crear un paso',
+    sc_time: '00:00',
+    sc_speed: 1,
+    sc_temp_in_celcius: 100,
+    pot_temp: 2,
+    pot_time: '00:00:00',
+    pot_program: 'asar'
+  }
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
   const [recipeName, setRecipeName] = useState<string>("")
   const [recipeType, setRecipeType] = useState<string>("")
@@ -19,8 +29,7 @@ export function RecipeForm() {
 
   const [listOfIngredients, setListOfIngredients] = useState<IRecipeIngredient[]>([])
   const [showIgredients, setShowIgredients] = useState(false)
-  const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([])
-  const [showSteps, setShowSteps] = useState(false)
+  const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([dummyStep])
 
   useEffect(()=>{
     if (addRawIngredient)
@@ -45,6 +54,16 @@ export function RecipeForm() {
     setListOfIngredients(filtered);
   }
 
+  const handleStep = (step: IRecipeStep) => {
+    const filtered = listOfSteps.filter(
+      (item) => item.instructions !== step.instructions)
+    if (filtered.length === listOfSteps.length) {
+      filtered.push(step)
+    }
+    setListOfSteps(filtered);
+  }
+
+
   const handleType = (event: SelectChangeEvent<string>) => {
     const {
       target: { value },
@@ -67,7 +86,7 @@ export function RecipeForm() {
         Nueva Receta
       </Typography>
     </Grid2>
-
+    <ModalAddIngredient isOpen={addRawIngredient} handleClose={()=>{setAddRawIngredient(false); loadRawIngredients()}}/>
     <Grid2 size={6}>
       <Typography>Nombre de receta</Typography>
       <TextField
@@ -114,47 +133,42 @@ export function RecipeForm() {
         }}
       />
     </Grid2>
-    <Grid2 container spacing={2} size={12}>
-      <Grid2 size={6}>
-        <Button
-          color={"secondary"}
-          variant={"outlined"}
-          fullWidth
-          onClick={()=>setShowIgredients(!showIgredients)}
-          startIcon={<ShoppingCartRounded/>}
-        >Listar ingredientes</Button>
-      </Grid2>
-      <Grid2 size={6}>
-        <Button
-          fullWidth
-          color={"secondary"}
-          variant={"outlined"}
-          startIcon={<AutoStoriesRounded/>}
-        >Instrucciones y pasos</Button>
-      </Grid2>
-    </Grid2>
-    {showIgredients ? (<Grid2>
-      <Grid2>
-        <Typography variant={"h4"}>Lista de ingredientes
-
-        </Typography>
-      </Grid2>
-      <Grid2 >
-        <ModalAddIngredient isOpen={addRawIngredient} handleClose={()=>{setAddRawIngredient(false); loadRawIngredients()}}/>
-        <Typography variant={"caption"} color={"textDisabled"}>
-          Tu ingredeinte no esta en la lista? Agregalo aquí <AddCircle
-            onClick={()=>setAddRawIngredient(true)}
-          />
-        </Typography>
-      </Grid2>
+    <Grid2 size={12} container>
+      <Button
+        color={"secondary"}
+        variant={"outlined"}
+        fullWidth
+        startIcon={<ShoppingCartRounded/>}
+      >Listar ingredientes</Button>
+     <Typography variant={"caption"} color={"textDisabled"}>
+        Tu ingrediente no esta en la lista? Agregalo aquí <AddCircle
+       fontSize={"small"}
+          onClick={()=>setAddRawIngredient(true)}
+        />
+      </Typography>
       <RecipeIngredients
         ingredients={listOfIngredients}
         editable={true}
         saveIngredient={handleIngredients}
         baseIngredients={rawIngredients}/>
-    </Grid2>) : (<></>)}
-    <Divider/>
+    </Grid2>
     <Grid2 size={12}>
+      <Button
+        fullWidth
+        color={"primary"}
+        variant={"outlined"}
+        startIcon={<AutoStoriesRounded/>}
+      >Instrucciones y pasos</Button>
+      {listOfSteps.map((item, index)=>{
+        return <ItemRecipeStep
+          key={`recipe-step-${index}`}
+          step={item} index={index}
+          deleteStep={handleStep}
+        />
+      })}
+    </Grid2>
+    <Divider/>
+    <Grid2 size={12} container>
       <Button
         fullWidth
         size={"large"}

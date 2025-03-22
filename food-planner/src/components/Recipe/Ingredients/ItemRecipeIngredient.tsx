@@ -28,7 +28,7 @@ export function ItemRecipeIngredient(
       ingredientConvertions: ing.convertions
     })
     return convetionsTexts.map(({quantity, unit})=>{
-      return `${quantity} ${unit}`
+      return `${quantity.toFixed(2)} ${unit}`
     }).flat().join(' / ')
   }
 

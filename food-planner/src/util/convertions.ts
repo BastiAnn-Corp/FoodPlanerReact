@@ -1,11 +1,5 @@
 import {TMeasureUnits} from "@/util/constants";
-import {IConvertionIngredients, IRecipeIngredient, IRecipeStep} from "@/util/models";
-
-interface IConvertions {
-  measurementUnitInput: TMeasureUnits;
-  measurementUnitOutput: TMeasureUnits;
-  ratioInputToOutput: number;
-}
+import {IConvertionIngredients, IRecipeStep} from "@/util/models";
 
 interface IConvertionOnIngredient {
   measurementUnitInput: TMeasureUnits;
@@ -51,9 +45,9 @@ export function convertionsOnIngredient({
 export function potTempToIcons (temp: number){
   let text = ''
   if (temp === 1){
-    text = '🔥▪️▪️'
+    text = '🔥◼️◼️'
   } else if (temp === 2){
-    text = '🔥🔥️▪️'
+    text = '🔥🔥️◼️'
   } else if (temp === 3){
     text = '🔥🔥️🔥️'
   }
@@ -67,7 +61,7 @@ export function potText (step: IRecipeStep):string {
     pot_temp,
   } = step
   if (pot_time && pot_program && pot_temp){
-    return `🍲 ${pot_program}: 🕑${pot_time} / 🌡️${potTempToIcons(pot_temp)}`;
+    return `${pot_program}: 🕑${pot_time} / ${potTempToIcons(pot_temp)}`;
   } else {
     return ''
   }
@@ -80,7 +74,7 @@ export function robotCookText (step: IRecipeStep):string {
     sc_temp_in_celcius,
   } = step
   if (sc_time && sc_speed && sc_temp_in_celcius){
-    return `🤖 🕑${sc_time} / 🔄${sc_speed} /🌡️${sc_temp_in_celcius} °C`;
+    return `🕑${sc_time} / 🔄${sc_speed} /🌡️${sc_temp_in_celcius} °C`;
   } else {
     return ''
   }

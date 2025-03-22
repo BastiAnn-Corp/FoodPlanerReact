@@ -1,5 +1,5 @@
 import {IRecipeStep} from "@/util/models";
-import {Grid2, IconButton, Paper, Typography} from "@mui/material";
+import {Chip, Grid2, IconButton, Paper, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import React from "react";
 import {potText, robotCookText} from "@/util/convertions";
@@ -23,21 +23,27 @@ export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
     ]
     return texts.filter(
       (text) => text !== ''
-    ).flat().join(' | ')
+    )
   }
 
   return (<Paper
     elevation={1}
     variant="outlined"
-    square
+    style={{padding: 5}}
   >
-    <Grid2 container direction={"row"} spacing={2}>
+    <Grid2 container direction={"row"} spacing={2} justifyContent={"space-around"}>
       <Grid2 size={8}>
         <Typography>{primaryText()}</Typography>
-        <Typography variant={"caption"}>{secondaryText()}</Typography>
+        {secondaryText().map((text, i)=>{
+          return <Chip
+            key={`instruction-cooking-${index}-${i}`}
+            label={text}
+            size={"small"} style={{marginRight: 5}}
+          />
+        })}
       </Grid2>
       {deleteStep ?
-        <Grid2 size={4}>
+        <Grid2 size={2} justifyContent={"right"} alignContent={"center"}>
           <IconButton edge="end" aria-label="delete" onClick={()=>{deleteStep(step)}}>
             <Delete/>
           </IconButton>
