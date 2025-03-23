@@ -67,12 +67,9 @@ export function validateRecipeCreation(args: ICreateRecipeInput) : boolean {
   }
 }
 
-export async function createRecipe(args): Promise<createDocOutput> {
+export async function createRecipe(args: ICreateRecipeInput): Promise<createDocOutput> {
   try {
-
-    const data : IRecipe = {
-
-    }
+    const data : IRecipe = args
     const docRef = await addDoc(
       collection(firestoreDB, collName),
       data

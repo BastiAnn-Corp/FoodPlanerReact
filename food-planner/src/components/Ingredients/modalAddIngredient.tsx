@@ -29,6 +29,13 @@ export function ModalAddIngredient({ isOpen, handleClose }: ModalAddIngredientPr
 
   useEffect(()=>{},[aisles, convertions, message])
 
+  useEffect(()=>{
+    setName("")
+    setAisles([])
+    setConvertions([])
+    setMessage({severity: "success"})
+  },[isOpen])
+
   async function create () {
     setIsLoading(true);
     setMessage({severity: "success"});

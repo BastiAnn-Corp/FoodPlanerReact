@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import {foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
 import {IIngredient, IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {RecipeIngredients} from "@/components/Recipe/Ingredients/RecipeIngredients";
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
@@ -101,7 +100,7 @@ export function RecipeForm() {
       const {error} = await createRecipe(recipe)
       setMessage({
         severity: error ? "error" : "success",
-        message: error ? error : "Ingrediente guardado!"
+        message: error ? error : `Nueva receta ${recipe.name} guardado!`
       })
     } else {
       setMessage({

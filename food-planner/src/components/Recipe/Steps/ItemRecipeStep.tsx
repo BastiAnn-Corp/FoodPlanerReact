@@ -33,7 +33,7 @@ export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
   return (<Paper
     elevation={1}
     variant="outlined"
-    style={{padding: 5}}
+    style={{padding: 5, marginTop: 3}}
   >
     <Grid2 container direction={"row"} spacing={2} justifyContent={"space-around"}>
       <Grid2 size={8}>
