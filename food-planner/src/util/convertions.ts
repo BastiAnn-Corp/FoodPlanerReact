@@ -60,7 +60,7 @@ export function potText (step: IRecipeStep):string {
     pot_time,
     pot_temp,
   } = step
-  if (pot_time && pot_program && pot_temp){
+  if (pot_time !== undefined && pot_program !== undefined && pot_temp !== undefined){
     return `${pot_program}: 🕑${pot_time} / ${potTempToIcons(pot_temp)}`;
   } else {
     return ''
@@ -73,7 +73,7 @@ export function robotCookText (step: IRecipeStep):string {
     sc_speed,
     sc_temp_in_celcius,
   } = step
-  if (sc_time && sc_speed && sc_temp_in_celcius){
+  if (sc_time !== undefined && sc_speed !== undefined && sc_temp_in_celcius !== undefined){
     return `🕑${sc_time} / 🔄${sc_speed} /🌡️${sc_temp_in_celcius} °C`;
   } else {
     return ''

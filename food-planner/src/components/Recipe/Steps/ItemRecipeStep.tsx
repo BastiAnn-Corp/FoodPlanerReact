@@ -1,7 +1,8 @@
+"use client"
 import {IRecipeStep} from "@/util/models";
 import {Chip, Grid2, IconButton, Paper, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
-import React from "react";
+import React, {useEffect} from "react";
 import {potText, robotCookText} from "@/util/convertions";
 
 interface ItemRecipeStepProps {
@@ -11,6 +12,9 @@ interface ItemRecipeStepProps {
 }
 
 export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
+  useEffect(() => {
+
+  }, [step, index]);
 
   const primaryText = ():string => {
     return `${index+1}. ${step.instructions}`

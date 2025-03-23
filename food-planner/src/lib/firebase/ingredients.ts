@@ -2,7 +2,7 @@ import {TAisle} from "@/util/constants";
 import {IConvertionIngredients, IIngredient} from "@/util/models";
 import {addDoc, collection, FirestoreError, query, Query, where} from "@firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
-import {getConvertedDocs} from "@/lib/firebase/firestore";
+import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 
 const collName = 'ingredients'
 const converter : FirebaseFirestore.FirestoreDataConverter<IIngredient> =  {
@@ -43,10 +43,6 @@ export interface ICreateIngredient{
   convertions: IConvertionIngredients[];
 }
 
-export interface createDocOutput {
-  data: string | null,
-  error?: string
-}
 
 export async function createIngredient(args: ICreateIngredient): Promise<createDocOutput>{
   try {

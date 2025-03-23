@@ -53,6 +53,12 @@ interface InputGetDocs {
   queryFilters?: (a: Query<DocumentData, DocumentData>) => Query;
 }
 
+
+export interface createDocOutput {
+  data: string | null,
+  error?: string
+}
+
 export async function getConvertedDocs({
   coll,
   queryFilters=(a: Query<DocumentData, DocumentData>): Query=>{return a}

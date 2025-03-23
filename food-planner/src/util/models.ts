@@ -5,7 +5,7 @@ type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] exte
   ? Acc[number]
   : Enumerate<N, [...Acc, Acc['length']]>
 
-type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
+export type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
 
 
 export interface ICategory {
@@ -33,7 +33,7 @@ export interface IRecipeStep{
   instructions: string;
   sc_time?: string; // mm:ss
   sc_temp_in_celcius?: IntRange<0, 120>;
-  sc_speed?: 1|2|3|4|5|6|7|8|9;
+  sc_speed?: IntRange<0, 10>;
   pot_program?: TPotProgram;
   pot_time?: string; // HH:mm:ss
   pot_temp?: 1 | 2 | 3;

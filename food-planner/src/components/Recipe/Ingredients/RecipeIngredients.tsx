@@ -29,17 +29,5 @@ export function RecipeIngredients(
       ingredients={baseIngredients}
     />
   </Grid2> : <br/>}
-    <Grid2 size={12}>
-    <List>{
-      ingredients.map((ingredient,index)=>{
-        return (<ItemRecipeIngredient
-          key={`recipe-ingredient-${index}`}
-          index={index}
-          ingredient={ingredient}
-          deleteIngredient={addIngredient}
-        />)
-      })
-    }</List>
-    </Grid2>
   </Grid2>)
 }

@@ -1,24 +1,29 @@
 "use client"
 import React, {useEffect, useState} from "react";
-import {Button, Divider, Grid2, MenuItem, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
-import {foodFamilies, seasons} from "@/util/constants";
-import {IIngredient, IRecipeIngredient, IRecipeStep} from "@/util/models";
+import {
+  Accordion, AccordionDetails, AccordionSummary, Alert,
+  Button, CircularProgress,
+  Divider,
+  Grid2, List,
+  MenuItem, Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography
+} from "@mui/material";
+import {foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
+import {IIngredient, IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
 import {RecipeIngredients} from "@/components/Recipe/Ingredients/RecipeIngredients";
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
 import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
+import {RecipeStepForm} from "@/components/Recipe/Steps/RecipeStepForm";
+import {RecipeIngredientForm} from "@/components/Recipe/Ingredients/RecipeIngredientForm";
+import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
+import {createRecipe, validateRecipeCreation} from "@/lib/firebase/recipes";
 
 export function RecipeForm() {
-  const dummyStep: IRecipeStep = {
-    instructions: 'Crear un paso',
-    sc_time: '00:00',
-    sc_speed: 1,
-    sc_temp_in_celcius: 100,
-    pot_temp: 2,
-    pot_time: '00:00:00',
-    pot_program: 'asar'
-  }
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
   const [recipeName, setRecipeName] = useState<string>("")
   const [recipeType, setRecipeType] = useState<string>("")
@@ -28,8 +33,10 @@ export function RecipeForm() {
   const [addRawIngredient, setAddRawIngredient] = useState<boolean>(false);
 
   const [listOfIngredients, setListOfIngredients] = useState<IRecipeIngredient[]>([])
-  const [showIgredients, setShowIgredients] = useState(false)
-  const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([dummyStep])
+  const [listOfSteps, setListOfSteps] = useState<IRecipeStep[]>([])
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = React.useState<{severity: 'success' | 'error', message?: string}>({severity: "success"});
 
   useEffect(()=>{
     if (addRawIngredient)
@@ -38,7 +45,7 @@ export function RecipeForm() {
 
   useEffect(()=>{
 
-  }, [listOfIngredients])
+  }, [listOfIngredients, message])
 
   async function loadRawIngredients (){
     const result = await getIngredients({})
@@ -80,7 +87,32 @@ export function RecipeForm() {
     );
   };
 
-  return (<Grid2 spacing={4} direction={"row"} padding={5} justifyContent={"space-around"} container>
+  async function handleCreateRecipe () {
+    setIsLoading(true)
+    const recipe:IRecipe = {
+      name: recipeName,
+      portions: recipePortions,
+      seasons: selectedSeasons as TSeasons[],
+      family:recipeType as TFoodFamily,
+      ingredients_list: listOfIngredients,
+      steps: listOfSteps,
+    }
+    if (validateRecipeCreation(recipe)){
+      const {error} = await createRecipe(recipe)
+      setMessage({
+        severity: error ? "error" : "success",
+        message: error ? error : "Ingrediente guardado!"
+      })
+    } else {
+      setMessage({
+        severity: "error",
+        message: "Faltan campos por completar"
+      })
+    }
+    setIsLoading(false)
+  }
+
+  return (<Grid2 spacing={1} direction={"row"} padding={5} justifyContent={"space-around"} container>
     <Grid2 size={12}>
       <Typography variant={"h3"} color={"primary"}>
         Nueva Receta
@@ -134,51 +166,87 @@ export function RecipeForm() {
       />
     </Grid2>
     <Grid2 size={12} container>
-      <Button
-        color={"secondary"}
-        variant={"outlined"}
-        fullWidth
-        startIcon={<ShoppingCartRounded/>}
-      >Listar ingredientes</Button>
-     <Typography variant={"caption"} color={"textDisabled"}>
-        Tu ingrediente no esta en la lista? Agregalo aquí <AddCircle
-       fontSize={"small"}
-          onClick={()=>setAddRawIngredient(true)}
-        />
-      </Typography>
-      <RecipeIngredients
-        ingredients={listOfIngredients}
-        editable={true}
-        saveIngredient={handleIngredients}
-        baseIngredients={rawIngredients}/>
+      <Accordion>
+        <AccordionSummary>
+          <Typography color={"secondary"}><ShoppingCartRounded/> Lista de ingredientes </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Paper elevation={2}
+                 style={{padding: 10, margin:5}}
+          >
+            <Typography variant={"caption"} color={"textDisabled"}>
+              Tu ingrediente no esta en la lista? Agregalo aquí <AddCircle
+              fontSize={"small"}
+              onClick={()=>setAddRawIngredient(true)}
+            />
+            </Typography>
+            <RecipeIngredientForm
+              addIngredient={handleIngredients}
+              ingredients={rawIngredients}
+            />
+          </Paper>
+          <List>{
+            listOfIngredients.map((ing,index)=>{
+              return (<ItemRecipeIngredient
+                key={`recipe-ingredient-${index}`}
+                index={index}
+                ingredient={ing}
+                deleteIngredient={handleIngredients}
+              />)
+            })
+          }</List>
+        </AccordionDetails>
+      </Accordion>
+
+
     </Grid2>
     <Grid2 size={12}>
-      <Button
-        fullWidth
-        color={"primary"}
-        variant={"outlined"}
-        startIcon={<AutoStoriesRounded/>}
-      >Instrucciones y pasos</Button>
-      {listOfSteps.map((item, index)=>{
-        return <ItemRecipeStep
-          key={`recipe-step-${index}`}
-          step={item} index={index}
-          deleteStep={handleStep}
-        />
-      })}
+      <Accordion>
+        <AccordionSummary>
+          <Typography color={"primary"}><AutoStoriesRounded/> Instrucciones y pasos </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <RecipeStepForm saveStep={handleStep}/>
+          {listOfSteps.map((item, index)=>{
+            return <ItemRecipeStep
+              key={`recipe-step-${index}`}
+              step={item} index={index}
+              deleteStep={handleStep}
+            />
+          })}
+        </AccordionDetails>
+      </Accordion>
+
     </Grid2>
     <Divider/>
-    <Grid2 size={12} container>
-      <Button
-        fullWidth
-        size={"large"}
-        variant={"contained"}
-        disabled={
-          recipeName === "" || selectedSeasons.length === 0 ||
-          recipeType === "" || listOfIngredients.length === 0 ||
-          listOfSteps.length === 0
-        }
-      >Guardar receta</Button>
-    </Grid2>
+ <Grid2 container size={12} spacing={2} direction={"row"}>
+   {message.message ? <Grid2 size={12}>
+     <Alert severity={message.severity}>{message.message}</Alert>
+   </Grid2> : <></>}
+   <Grid2 size={6}>
+     <Button
+       fullWidth
+       size={"large"}
+       variant={"contained"}
+       color={"inherit"}
+       disabled={isLoading}
+       href={'/recipes'}
+     >Volver</Button>
+   </Grid2>
+   <Grid2 size={6}>
+     <Button
+       fullWidth
+       size={"large"}
+       variant={"contained"}
+       disabled={
+         recipeName === "" || selectedSeasons.length === 0 ||
+         recipeType === "" || listOfIngredients.length === 0 ||
+         listOfSteps.length === 0 || isLoading
+       }
+       onClick={()=>{handleCreateRecipe()}}
+     >{isLoading ? <CircularProgress/> : "Crear receta"}</Button>
+   </Grid2>
+ </Grid2>
+
   </Grid2>)
 }

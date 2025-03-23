@@ -1,6 +1,8 @@
-import {IRecipe} from "@/util/models";
-import {query, Query, where} from "@firebase/firestore";
-import {getConvertedDocs} from "@/lib/firebase/firestore";
+import {IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
+import {addDoc, collection, FirestoreError, query, Query, where} from "@firebase/firestore";
+import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
+import {firestoreDB} from "@/lib/firebase/firebase-config";
+import {TFoodFamily, TSeasons} from "@/util/constants";
 
 const collName = 'recipe'
 const converter : FirebaseFirestore.FirestoreDataConverter<IRecipe> =  {
@@ -41,5 +43,47 @@ export async function getRecipes({name, season, family} : IFilterRecipes) : Prom
   } catch (error) {
     console.error('getRecipes', error);
     return []
+  }
+}
+
+
+export interface ICreateRecipeInput {
+  name: string;
+  portions: number;
+  seasons: TSeasons[];
+  family: TFoodFamily;
+  ingredients_list: Array<IRecipeIngredient>;
+  steps: Array<IRecipeStep>;
+}
+
+export function validateRecipeCreation(args: ICreateRecipeInput) : boolean {
+  if(
+    args.name.length === 0 || args.portions === 0 || args.seasons.length === 0
+    || args.ingredients_list.length === 0 || args.steps.length === 0
+  ){
+    return false
+  } else {
+    return true
+  }
+}
+
+export async function createRecipe(args): Promise<createDocOutput> {
+  try {
+
+    const data : IRecipe = {
+
+    }
+    const docRef = await addDoc(
+      collection(firestoreDB, collName),
+      data
+    )
+    return {data: docRef.id};
+  } catch(error) {
+    console.log('createRecipe', error);
+    const err = error as FirestoreError;
+    return {
+      data: null,
+      error: `${err.name}: ${err.message}`,
+    }
   }
 }

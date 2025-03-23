@@ -1,5 +1,5 @@
 import {IIngredient, IRecipeIngredient} from "@/util/models";
-import {Button, Grid2, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {Button, Grid2, MenuItem, Paper, Select, TextField, Typography} from "@mui/material";
 import {IngredientsSelector} from "@/components/Ingredients/IngredientsSelector";
 import {useState} from "react";
 import {measuerementUnits, TMeasureUnits} from "@/util/constants";
@@ -35,7 +35,8 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
     return found.convertions.map(({unit})=> unit).flat()
   }
 
-  return (<Grid2 container direction={"row"} spacing={2}>
+  return (
+    <Grid2 container direction={"row"} spacing={2}>
     <Grid2 size={12}>
       <Typography variant={"caption"}>Elije ingrediente para la receta:</Typography>
       <IngredientsSelector
@@ -80,8 +81,8 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
     variant={"contained"}
     color={"secondary"}
     onClick={()=>{handleSave()}}
-    disabled={quantity === 0 && unit === null && ingredient === null}
+    disabled={quantity === 0}
   >Agregar ingrediente a la lista</Button>
     </Grid2>
-  </Grid2>)
+    </Grid2>)
 }
