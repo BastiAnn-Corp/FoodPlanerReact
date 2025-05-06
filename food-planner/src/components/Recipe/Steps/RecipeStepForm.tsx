@@ -83,7 +83,7 @@ export function RecipeStepForm({saveStep}:RecipeStepFormProps){
         Robot de cocina
       </Typography>
       {showcookRobot ?
-        <Grid2 container spacing={3} justifyContent={"space-between"}>
+        <Grid2 container spacing={3} justifyContent={"space-between"} columns={{ xs: 4, sm: 4, md: 12, lg:12, xl:12 }}>
           <Grid2 size={4}>
             <TextField
               label={"🕑 Tiempo"}
@@ -148,7 +148,7 @@ export function RecipeStepForm({saveStep}:RecipeStepFormProps){
         Otra máquina
       </Typography>
       {showcookPot ?
-        <Grid2 container spacing={3} justifyContent={"space-between"}>
+        <Grid2 container spacing={3} justifyContent={"space-between"} columns={{ xs: 4, sm: 4, md: 12, lg:12, xl:12 }}>
           <Grid2 size={4}>
             <FormControl fullWidth>
               <InputLabel id={"pot-program-select-label"}>Programa</InputLabel>

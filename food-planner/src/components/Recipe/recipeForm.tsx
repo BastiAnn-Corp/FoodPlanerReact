@@ -164,7 +164,7 @@ export function RecipeForm() {
       />
     </Grid2>
     <Grid2 size={6} container>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary>
           <Typography color={"secondary"}><ShoppingCartRounded/> Lista de ingredientes </Typography>
         </AccordionSummary>
@@ -199,7 +199,7 @@ export function RecipeForm() {
 
     </Grid2>
     <Grid2 size={6}>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary>
           <Typography color={"primary"}><AutoStoriesRounded/> Instrucciones y pasos </Typography>
         </AccordionSummary>
