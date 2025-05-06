@@ -1,6 +1,6 @@
 import {TAisle} from "@/util/constants";
 import {IConvertionIngredients, IIngredient} from "@/util/models";
-import {addDoc, collection, FirestoreError, query, Query, where} from "@firebase/firestore";
+import {addDoc, collection, FirestoreError, orderBy, query, Query, where} from "@firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 
@@ -28,6 +28,7 @@ export async function getIngredients({
     if(name){
       q = query(q, where("name", '==', name.toLowerCase()));
     }
+    q = query(q, orderBy("name"));
     return q;
   }
   const ingredients= await getConvertedDocs({

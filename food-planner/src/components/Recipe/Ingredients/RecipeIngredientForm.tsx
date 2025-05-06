@@ -17,7 +17,7 @@ export function RecipeIngredientForm(props:RecipeIngredientFormProps) {
     const found = props.ingredients.find((i)=> i.name === ingredient)
     if (found && quantity > 0 && unit !== null){
      const recipeIngredient: IRecipeIngredient = {
-       ingredient: found,
+       ingredient: {...found, convertions:[]},
        quantity,
        quantity_unit: unit
      }

@@ -1,5 +1,5 @@
 import {IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {addDoc, collection, FirestoreError, query, Query, where} from "@firebase/firestore";
+import {addDoc, collection, FirestoreError, orderBy, query, Query, where} from "@firebase/firestore";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {TFoodFamily, TSeasons} from "@/util/constants";
@@ -12,6 +12,7 @@ const converter : FirebaseFirestore.FirestoreDataConverter<IRecipe> =  {
 }
 
 export interface IFilterRecipes {
+  id?: string;
   name?: string;
   season?: string;
   family?: string;
@@ -19,11 +20,11 @@ export interface IFilterRecipes {
   page?: number;
 }
 
-export async function getRecipes({name, season, family} : IFilterRecipes) : Promise<IRecipe[]> {
+export async function getRecipes({id, name, season, family} : IFilterRecipes) : Promise<IRecipe[]> {
   try{
     function filterRecipes (q:Query) : Query {
       if(name){
-        q = query(q, where("name", 'in', name.toLowerCase()));
+        q = query(q, where("id", '==', id));
       }
       if(season){
         q = query(q, where("seasons", 'array-contains', season.toLowerCase()));
@@ -31,6 +32,7 @@ export async function getRecipes({name, season, family} : IFilterRecipes) : Prom
       if(family){
         q = query(q, where("family", '==', family.toLowerCase()));
       }
+      q = query(q, orderBy("name"));
       return q;
     }
     const recipes = await getConvertedDocs({
@@ -84,3 +86,4 @@ export async function createRecipe(args: ICreateRecipeInput): Promise<createDocO
     }
   }
 }
+

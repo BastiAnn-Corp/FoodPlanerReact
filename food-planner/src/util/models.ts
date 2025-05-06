@@ -53,6 +53,7 @@ export interface IRecipe extends DocumentData{
   family: TFoodFamily;
   ingredients_list: Array<IRecipeIngredient>;
   steps: Array<IRecipeStep>;
+  notes?: string;
 }
 
 export interface IMenu extends DocumentData {

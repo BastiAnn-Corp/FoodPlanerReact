@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
-import {ItemRecipe} from "@/components/Recipe/ItemRecipe";
 import {foodFamilies, seasons} from "@/util/constants";
 import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
 import {Base} from "@/components/Base";
+import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
 
 export default function Recipes() {
   const [recipes, setRecipes] = React.useState<IRecipe[]>([]);
@@ -23,7 +23,7 @@ export default function Recipes() {
   const [filterFamily, setFilterFamily] = React.useState<string>("");
   useEffect(()=>{
     if (recipes.length == 0 && filterName == "" && filterSeason == "" && filterFamily == "") {
-
+      loadRecipes()
     }
   },[recipes])
 
@@ -89,8 +89,8 @@ export default function Recipes() {
         >Nueva receta</Button>
       </Grid2>
     </Grid2>
-    <Grid2 container spacing={2} direction={"column"}>
-      <Grid2>
+    <Grid2 container spacing={2} direction={"row"} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} paddingBottom={10}>
+      <Grid2 size={{xs: 6, sm: 6, md: 2, lg:2, xl:2}}>
         <TextField
           placeholder={"Buscar por nombre"}
           value={filterName}
@@ -109,17 +109,18 @@ export default function Recipes() {
             },
           }}
         />
-      </Grid2>
-      <Grid2 container direction={"row"}>
-        <Grid2>
-          {renderSeasonFilter()}
-          {renderFoodFamilyFilter()}
+        <Grid2 container direction={"row"} size={6}>
+          <Grid2>
+            {renderSeasonFilter()}
+            {renderFoodFamilyFilter()}
+          </Grid2>
         </Grid2>
+
       </Grid2>
-      <Grid2>
+      <Grid2 size={{xs: 6, sm: 6, md: 10, lg:10, xl:10}}>
         <List key={'recipe-list'}>
           {recipes.map((r,index)=>{
-            return <ItemRecipe
+            return <AccordionRecipe
               key={`recipe-${index}`}
               recipe={r}
               index={index}

@@ -38,8 +38,7 @@ export function RecipeForm() {
   const [message, setMessage] = React.useState<{severity: 'success' | 'error', message?: string}>({severity: "success"});
 
   useEffect(()=>{
-    if (addRawIngredient)
-    loadRawIngredients().then()
+    loadRawIngredients()
   }, [addRawIngredient])
 
   useEffect(()=>{
@@ -111,7 +110,7 @@ export function RecipeForm() {
     setIsLoading(false)
   }
 
-  return (<Grid2 spacing={1} direction={"row"} padding={5} justifyContent={"space-around"} container>
+  return (<Grid2 spacing={1} direction={"row"} justifyContent={"space-around"} container columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} paddingBottom={10}>
     <Grid2 size={12}>
       <Typography variant={"h3"} color={"primary"}>
         Nueva Receta
@@ -141,7 +140,7 @@ export function RecipeForm() {
         ))}
       </Select>
     </Grid2>
-    <Grid2 size={8}>
+    <Grid2 size={{ xs: 6, sm: 6, md: 8, lg:8, xl:8 }}>
       <Typography>Tipo de receta</Typography>
       <Select variant={"outlined"} fullWidth
               value={recipeType}
@@ -152,7 +151,7 @@ export function RecipeForm() {
         ))}
       </Select>
     </Grid2>
-    <Grid2 size={4}>
+    <Grid2 size={{ xs: 6, sm: 6, md: 4, lg:4, xl:4 }}>
       <Typography>Porciones</Typography>
       <TextField
         fullWidth
@@ -164,7 +163,7 @@ export function RecipeForm() {
         }}
       />
     </Grid2>
-    <Grid2 size={12} container>
+    <Grid2 size={6} container>
       <Accordion>
         <AccordionSummary>
           <Typography color={"secondary"}><ShoppingCartRounded/> Lista de ingredientes </Typography>
@@ -199,7 +198,7 @@ export function RecipeForm() {
 
 
     </Grid2>
-    <Grid2 size={12}>
+    <Grid2 size={6}>
       <Accordion>
         <AccordionSummary>
           <Typography color={"primary"}><AutoStoriesRounded/> Instrucciones y pasos </Typography>

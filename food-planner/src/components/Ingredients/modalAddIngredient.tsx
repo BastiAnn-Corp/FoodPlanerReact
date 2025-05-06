@@ -1,8 +1,7 @@
 "use client"
 import {
   Alert,
-  Button, Card, CardActions, CardContent,
-  Chip, CircularProgress, Container,
+  Button, Card, CardActions, CardContent, CircularProgress, Container,
   Grid2, MenuItem, Modal,
   Select,
   SelectChangeEvent,
@@ -12,7 +11,6 @@ import {
 import React, {useEffect} from "react";
 import {IConvertionIngredients} from "@/util/models";
 import {marketAisles, TAisle, TMeasureUnits} from "@/util/constants";
-import {IngredientConvertionForm} from "@/components/Ingredients/ingredientConvertionForm";
 import {createIngredient} from "@/lib/firebase/ingredients";
 
 interface ModalAddIngredientProps {
@@ -23,7 +21,9 @@ interface ModalAddIngredientProps {
 export function ModalAddIngredient({ isOpen, handleClose }: ModalAddIngredientProps) {
   const [name, setName] = React.useState<string>("");
   const [aisles, setAisles] = React.useState<TAisle[]>([]);
-  const [convertions, setConvertions] = React.useState<IConvertionIngredients[]>([]);
+  const [convertions, setConvertions] = React.useState<IConvertionIngredients[]>([{
+    unit: 'unidad', quantity: 1
+  }]);
   const [message, setMessage] = React.useState<{severity: 'success' | 'error', message?: string}>({severity: "success"});
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -102,21 +102,6 @@ export function ModalAddIngredient({ isOpen, handleClose }: ModalAddIngredientPr
                 })
               }</Select>
             </Grid2>
-            <Grid2 size={12}>
-              <Typography>Converciones de unidad</Typography>
-              {convertions.length > 0 ? convertions.map(({unit, quantity})=> {
-                return <Chip
-                  key={unit}
-                  variant={"outlined"}
-                  size={"small"}
-                  label={`${quantity} ${unit}`}
-                  style={{marginRight:5}}
-                />
-              }) : <></>}
-            </Grid2>
-            <Grid2 size={12}>
-                <IngredientConvertionForm addConvertion={addConvertion} index={convertions.length}/>
-            </Grid2>
           </Grid2>
           {message.message ? <Grid2 size={12}>
             <Alert severity={message.severity}>{message.message}</Alert>
@@ -127,7 +112,7 @@ export function ModalAddIngredient({ isOpen, handleClose }: ModalAddIngredientPr
                   variant={"contained"}
                   color={"inherit"}
                   onClick={handleClose}>
-          Atrás
+          Cerrar
         </Button>
           <Button
             fullWidth

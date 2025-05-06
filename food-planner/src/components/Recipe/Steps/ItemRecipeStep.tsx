@@ -1,6 +1,6 @@
 "use client"
 import {IRecipeStep} from "@/util/models";
-import {Chip, Grid2, IconButton, Paper, Typography} from "@mui/material";
+import {Checkbox, Chip, Grid2, IconButton, Paper, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import React, {useEffect} from "react";
 import {potText, robotCookText} from "@/util/convertions";
@@ -33,7 +33,7 @@ export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
   return (<Paper
     elevation={1}
     variant="outlined"
-    style={{padding: 5, marginTop: 3}}
+    style={{padding: 5, marginTop: 3, borderColor: "#558b2f"}}
   >
     <Grid2 container direction={"row"} spacing={2} justifyContent={"space-around"}>
       <Grid2 size={8}>
@@ -47,11 +47,13 @@ export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
         })}
       </Grid2>
       {deleteStep ?
-        <Grid2 size={2} justifyContent={"right"} alignContent={"center"}>
+        <Grid2 justifyContent={"right"} alignContent={"center"}>
           <IconButton edge="end" aria-label="delete" onClick={()=>{deleteStep(step)}}>
             <Delete/>
           </IconButton>
-        </Grid2>: <></>
+        </Grid2>: <Grid2 alignContent={"center"}>
+          <Checkbox/>
+        </Grid2>
       }
     </Grid2>
   </Paper>)

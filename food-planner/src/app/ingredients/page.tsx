@@ -61,7 +61,7 @@ export default function Ingredients(){
   }
 
   return (<Base>
-    <Grid2 container spacing={1} padding={1} justifyContent={"space-between"}>
+    <Grid2 container spacing={1} justifyContent={"space-between"} >
       <Grid2 size={4}>
         <Typography variant={"h3"}> Ingredientes </Typography>
       </Grid2>
@@ -77,8 +77,8 @@ export default function Ingredients(){
       </Grid2>
       <ModalAddIngredient isOpen={addIngredient} handleClose={()=>{setAddIngredient(false)}}/>
     </Grid2>
-    <Grid2 container spacing={2} direction={"column"}>
-      <Grid2>
+    <Grid2 container spacing={2} direction={"row"} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} paddingBottom={10}>
+      <Grid2 size={{xs: 6, sm: 6, md: 2, lg:2, xl:2}}>
         <TextField
           placeholder={"Buscar ingrediente por nombre"}
           value={filterName}
@@ -97,13 +97,14 @@ export default function Ingredients(){
             },
           }}
         />
-      </Grid2>
-      <Grid2 container direction={"row"}>
-        <Grid2>
-          {renderAisleFilter()}
+        <Grid2 container direction={"row"}>
+          <Grid2>
+            {renderAisleFilter()}
+          </Grid2>
         </Grid2>
       </Grid2>
-      <Grid2>
+
+      <Grid2 size={{xs: 6, sm: 6, md: 10, lg:10, xl:10}}>
         <List key={'recipe-list'}>
           {ingredients.map((i,index)=>{
             return <ItemIngredient ingredient={i} index={index} editable={true} key={`ingredient-${index}`}/>

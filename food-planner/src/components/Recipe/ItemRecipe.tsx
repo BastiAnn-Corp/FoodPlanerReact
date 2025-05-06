@@ -1,8 +1,7 @@
-"use client"
 import {ICategory, IRecipe} from "@/util/models";
 import React from "react";
 import {Avatar, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
-import {ChevronRightRounded} from "@mui/icons-material";
+import {MoreVert} from "@mui/icons-material";
 import {foodFamilies} from "@/util/constants";
 
 export function ItemRecipe(
@@ -27,7 +26,7 @@ export function ItemRecipe(
   const familyData = familyEmoji()
 
   return (<ListItem
-    secondaryAction={<ChevronRightRounded href={`/recipes/${recipe.id}`}/>}
+    dense
   >
     <ListItemAvatar>
       <Avatar

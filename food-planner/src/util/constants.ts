@@ -154,6 +154,11 @@ export const marketAisles: ICategory[] = [
     icon:"🥫",
   },
   {
+    name:"Aliño",
+    id:"alino",
+    icon:"🌿",
+  },
+  {
     name:"Panaderia y Pasteleria",
     id:"panaderia-y-pasteleria",
     icon:"🍞",
