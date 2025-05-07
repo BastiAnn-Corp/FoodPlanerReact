@@ -21,11 +21,24 @@ export default function Recipes() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [filterSeason, setFilterSeason] = React.useState<string>("");
   const [filterFamily, setFilterFamily] = React.useState<string>("");
+  const [refresh, setRefresh] = React.useState(false);
+
   useEffect(()=>{
     if (recipes.length == 0 && filterName == "" && filterSeason == "" && filterFamily == "") {
       loadRecipes()
     }
   },[recipes])
+
+  useEffect(()=>{
+    loadRecipes()
+  },[refresh])
+
+  function liveFilterPerNameOrIngredient(recipe: IRecipe) : boolean{
+    const isPerName = recipe.name.toLowerCase().includes(filterName.toLowerCase())
+    const ingredientNames : string[] = recipe.ingredients_list.map((ing)=> ing.ingredient.name)
+    const inIngredients = ingredientNames.join(',').toLowerCase().includes(filterName.toLowerCase())
+    return isPerName || inIngredients
+  }
 
   async function loadRecipes() {
     const filters: IFilterRecipes = {}
@@ -43,7 +56,9 @@ export default function Recipes() {
         return item.name.toLowerCase().includes(filterName.toLowerCase())
       })
     }
-    setRecipes(response)
+    setRecipes(response.filter((item)=>{
+      return filterName !== "" ? liveFilterPerNameOrIngredient(item) : true
+    }))
     setIsLoading(false)
   }
 
@@ -65,7 +80,7 @@ export default function Recipes() {
       return <Chip
         size={"small"}
         style={{margin: 3}}
-        label={fam.icon}
+        label={`${fam.icon} ${fam.name}`}
         key={`filter-${fam.id}-${index}`}
         onClick={()=>{setFilterFamily(filterFamily === fam.id ? "" : fam.id)}}
         color={filterFamily === fam.id ? "secondary" : "default"}
@@ -92,7 +107,7 @@ export default function Recipes() {
     <Grid2 container spacing={2} direction={"row"} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} paddingBottom={10}>
       <Grid2 size={{xs: 6, sm: 6, md: 2, lg:2, xl:2}}>
         <TextField
-          placeholder={"Buscar por nombre"}
+          placeholder={"Buscar por nombre o ingrediente"}
           value={filterName}
           onChange={({target})=>{setFilterName(target.value)}}
           size={"small"}
@@ -102,14 +117,14 @@ export default function Recipes() {
               endAdornment: (
                 <InputAdornment position="end">
                   {isLoading ? <CircularProgress/> :
-                    <SearchRounded onClick={()=>{loadRecipes()}}/>
+                    <Button startIcon={<SearchRounded/>} onClick={()=>{loadRecipes()}}>Buscar</Button>
                   }
                 </InputAdornment>
               ),
             },
           }}
         />
-        <Grid2 container direction={"row"} size={6}>
+        <Grid2 container direction={"row"}>
           <Grid2>
             {renderSeasonFilter()}
             {renderFoodFamilyFilter()}
@@ -124,6 +139,7 @@ export default function Recipes() {
               key={`recipe-${index}`}
               recipe={r}
               index={index}
+              refreshAction={()=>{setRefresh(!refresh)}}
             />
           })}
         </List>

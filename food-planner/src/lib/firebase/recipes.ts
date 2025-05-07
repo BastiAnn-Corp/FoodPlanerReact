@@ -1,5 +1,5 @@
 import {IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {addDoc, collection, FirestoreError, orderBy, query, Query, where} from "@firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, FirestoreError, orderBy, query, Query, where} from "@firebase/firestore";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {TFoodFamily, TSeasons} from "@/util/constants";
@@ -27,9 +27,11 @@ export async function getRecipes({id, name, season, family} : IFilterRecipes) : 
         q = query(q, where("id", '==', id));
       }
       if(season){
+        console.log('getRecipes filters: season ', season);
         q = query(q, where("seasons", 'array-contains', season.toLowerCase()));
       }
       if(family){
+        console.log('getRecipes filters: family ', family);
         q = query(q, where("family", '==', family.toLowerCase()));
       }
       q = query(q, orderBy("name"));
@@ -84,6 +86,18 @@ export async function createRecipe(args: ICreateRecipeInput): Promise<createDocO
       data: null,
       error: `${err.name}: ${err.message}`,
     }
+  }
+}
+
+export async function deleteRecipe(documentId:string): Promise<string> {
+  try {
+    const docRef = doc(firestoreDB, collName, documentId);
+    await deleteDoc(docRef)
+    return `Receta eliminada`
+  } catch (error) {
+    console.error(`deleteRecipe: ${documentId}`, error);
+    const err = error as FirestoreError;
+    return `Error: ${err.name}: ${err.message}`
   }
 }
 

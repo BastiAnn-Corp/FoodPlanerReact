@@ -25,25 +25,36 @@ export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
       potText(step),
       robotCookText(step)
     ]
-    return texts.filter(
-      (text) => text !== ''
-    )
+    const chips = []
+    if (texts[0] !== ''){
+      chips.push(<Chip
+        key={`instruction-cooking-pot-${index}`}
+        label={texts[0]}
+        color={"warning"}
+        size={"small"} style={{marginRight: 5}}
+      />)
+    }
+    if (texts[1] !== ''){
+      chips.push(<Chip
+        key={`instruction-cooking-robot-${index}`}
+        label={texts[1]}
+        color={"info"}
+        size={"small"} style={{marginRight: 5}}
+      />)
+    }
+    return chips
   }
 
   return (<Paper
     elevation={1}
     variant="outlined"
-    style={{padding: 5, marginTop: 3, borderColor: "#558b2f"}}
+    style={{padding: 5, marginTop: 3}}
   >
     <Grid2 container direction={"row"} spacing={2} justifyContent={"space-around"}>
       <Grid2 size={8}>
         <Typography>{primaryText()}</Typography>
-        {secondaryText().map((text, i)=>{
-          return <Chip
-            key={`instruction-cooking-${index}-${i}`}
-            label={text}
-            size={"small"} style={{marginRight: 5}}
-          />
+        {secondaryText().map((chip)=>{
+          return chip
         })}
       </Grid2>
       {deleteStep ?

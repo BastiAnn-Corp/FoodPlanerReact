@@ -1,19 +1,39 @@
 "use client"
 
 import {IRecipe} from "@/util/models";
-import {Accordion, AccordionDetails, AccordionSummary, Grid2, List, Typography} from "@mui/material";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid2,
+  List, Snackbar,
+  Typography
+} from "@mui/material";
 import {ItemRecipe} from "@/components/Recipe/ItemRecipe";
 import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
 import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
-import {KeyboardArrowDownRounded} from "@mui/icons-material";
+import { KeyboardArrowDownRounded, ModeEditRounded} from "@mui/icons-material";
+import {DeleteButton} from "@/components/Common/DeleteButton";
+import {deleteRecipe} from "@/lib/firebase/recipes";
+import {useState} from "react";
 
 interface AccordionRecipeProps {
+  refreshAction: ()=>void
   recipe: IRecipe
   index: number
 }
 
-export function AccordionRecipe({recipe, index}: AccordionRecipeProps) {
+export function AccordionRecipe({recipe, index, refreshAction}: AccordionRecipeProps) {
   const {ingredients_list, steps} = recipe;
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  async function deleteAction() {
+    const error = await deleteRecipe(recipe.id!)
+    setErrorMessage(error)
+  }
+
   return <Accordion id={`accordion-recipe-${index}`}>
     <AccordionSummary
       expandIcon={<KeyboardArrowDownRounded />}
@@ -41,5 +61,24 @@ export function AccordionRecipe({recipe, index}: AccordionRecipeProps) {
         </Grid2>
       </Grid2>
     </AccordionDetails>
+    <AccordionActions disableSpacing>
+      <Grid2 container direction={"row"} spacing={1} justifyContent={"space-between"} >
+        <Grid2 size={"grow"}>
+          <DeleteButton
+            variant={"contained"}
+            deleteAction={()=> {deleteAction()}}
+            refresh={()=>{refreshAction()}}
+          />
+          <Snackbar open={errorMessage !== ''}
+                    autoHideDuration={6000}
+                    onClose={()=>{setErrorMessage('')}}
+                    message={errorMessage}
+          />
+        </Grid2>
+        <Grid2 size={"grow"}>
+          <Button variant={"contained"} color={"primary"} startIcon={<ModeEditRounded/>} fullWidth disabled>Modificar</Button>
+        </Grid2>
+      </Grid2>
+    </AccordionActions>
   </Accordion>
 }
