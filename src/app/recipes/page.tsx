@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
-import {foodFamilies, seasons} from "@/util/constants";
+import {baseURL, foodFamilies, seasons} from "@/util/constants";
 import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
 import {Base} from "@/components/Base";
 import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
@@ -100,7 +100,7 @@ export default function Recipes() {
           startIcon={<AddCircle/>}
           size={"small"}
           fullWidth
-          href={'/recipes/create'}
+          href={baseURL + '/recipes/create'}
         >Nueva receta</Button>
       </Grid2>
     </Grid2>

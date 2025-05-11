@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "export",  // <=== enables static exports
   reactStrictMode: true,
-  basePath: "/opencook",
+  basePath: process.env.BASE_URL || '',
 };
 
 export default nextConfig;

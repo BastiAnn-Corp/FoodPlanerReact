@@ -11,7 +11,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import {foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
+import {baseURL, foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
 import {IIngredient, IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
@@ -228,7 +228,7 @@ export function RecipeForm() {
        variant={"contained"}
        color={"inherit"}
        disabled={isLoading}
-       href={'/recipes'}
+       href={baseURL + '/recipes'}
      >Volver</Button>
    </Grid2>
    <Grid2 size={6}>
