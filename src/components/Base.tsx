@@ -11,22 +11,23 @@ import {
 } from "@mui/material";
 import React from "react";
 import {MenuBookRounded,RestaurantMenuRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {baseURL} from "@/util/constants";
 
 
 const pages = [
   {
     name: "Ingredientes",
-    route: "/ingredients",
+    route: baseURL + "/ingredients",
     icon: ""
   },
   {
     name: "Recetas",
-    route: "/recipes",
+    route: baseURL + "/recipes",
     icon: ""
   },
   {
     name: "Menús",
-    route: "/menus",
+    route: baseURL + "/menus",
     icon: ""
   },
 ]
@@ -45,7 +46,7 @@ export function Base({children}: BaseProps) {
           <RestaurantMenuRounded />
         </IconButton>
         <Button
-          href={'/'}
+          href={baseURL}
           size={"large"}
           color={"inherit"}
           variant={"text"}
@@ -69,8 +70,8 @@ export function Base({children}: BaseProps) {
     </Container>
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={4}>
       <BottomNavigation showLabels>
-        <BottomNavigationAction label="Ingredientes" icon={<ShoppingCartRounded color={"action"}/>} href={'/ingredients'} />
-        <BottomNavigationAction label="Recetas" icon={<MenuBookRounded color={"action"}/>} href={'/recipes'}/>
+        <BottomNavigationAction label="Ingredientes" icon={<ShoppingCartRounded color={"action"}/>} href={baseURL + '/ingredients'} />
+        <BottomNavigationAction label="Recetas" icon={<MenuBookRounded color={"action"}/>} href={baseURL + '/recipes'}/>
         <BottomNavigationAction label="Menús" icon={<RestaurantMenuRounded />} disabled/>
       </BottomNavigation>
     </Paper>

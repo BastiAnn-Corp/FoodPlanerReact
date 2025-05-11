@@ -7,10 +7,12 @@ import {
   query,
 } from "@firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
+import {firestore} from "firebase-admin";
+import FirestoreDataConverter = firestore.FirestoreDataConverter;
 
 interface pollItem {
 collection: string;
-converter:  FirebaseFirestore.FirestoreDataConverter<DocumentData>;
+converter:  FirestoreDataConverter<DocumentData>;
 }
 
 export const poll = {

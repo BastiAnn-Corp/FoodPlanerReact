@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "food-planner/node_modules/.bin/next dev --turbopack",
+    "build": "food-planner/node_modules/.bin/next build",
+    "start": "food-planner/node_modules/.bin/next start",
+    "lint": "food-planner/node_modules/.bin/next lint"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
