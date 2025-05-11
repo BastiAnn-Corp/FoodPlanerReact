@@ -11,7 +11,7 @@ export function convertionsOnIngredient({
   quantityInput = 1,
   ingredientConvertions = []
 }:IConvertionOnIngredient): IConvertionIngredients[] {
-  let convertions: IConvertionIngredients[] = [{
+  const convertions: IConvertionIngredients[] = [{
     quantity: quantityInput,
     unit: measurementUnitInput
   }]
