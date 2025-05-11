@@ -54,9 +54,14 @@ export function ModalAddIngredient({ isOpen, handleClose }: ModalAddIngredientPr
     const {
       target: { value },
     } = event;
-    setAisles(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    if (typeof value === 'string') {
+      // @ts-ignore
+      setAisles(value.split(','));
+    } else {
+      setAisles(
+        value,
+      );
+    }
   };
 
   const addConvertion = (q: number, u: TMeasureUnits) => {

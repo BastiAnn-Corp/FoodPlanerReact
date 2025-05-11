@@ -66,6 +66,7 @@ export async function getConvertedDocs({
 }: InputGetDocs) : Promise<DocumentData[]> {
   try {
     const {collection : path, converter} = coll
+    // @ts-ignore
     const collectionRef = collection(firestoreDB, path).withConverter(converter)
     let q = query(collectionRef)
     q = queryFilters(q)

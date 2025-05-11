@@ -106,7 +106,7 @@ export function RecipeStepForm({saveStep}:RecipeStepFormProps){
               type={"number"}
               onChange={(e)=>{
                 setRobotSpeed(
-                  e.target.value > -1 && e.target.value < 11 ?
+                  Number(e.target.value) > -1 && Number(e.target.value) < 11 ?
                     Number(e.target.value) : 0
                 )
               }}
@@ -128,7 +128,7 @@ export function RecipeStepForm({saveStep}:RecipeStepFormProps){
               disabled={!showcookRobot}
               onChange={(e)=>{
                 setRobotTemp(
-                  e.target.value > -1 && e.target.value < 131 ?
+                  Number(e.target.value) > -1 && Number(e.target.value) < 131 ?
                     Number(e.target.value) : 0
                 )
               }}

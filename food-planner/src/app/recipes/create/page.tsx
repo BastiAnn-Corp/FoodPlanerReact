@@ -5,7 +5,7 @@ import {Base} from "@/components/Base";
 export default function CreateRecipes() {
   return (
     <Base>
-      <RecipeForm save={false}/>
+      <RecipeForm/>
     </Base>
     );
 }
