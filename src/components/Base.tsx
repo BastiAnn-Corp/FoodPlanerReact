@@ -10,8 +10,9 @@ import {
   Toolbar, useMediaQuery, useTheme
 } from "@mui/material";
 import React from "react";
-import {MenuBookRounded,RestaurantMenuRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {ListRounded, MenuBookRounded, RestaurantMenuRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {baseURL} from "@/util/constants";
+import {UserNameButton} from "@/components/Auth/UserNameButton";
 
 
 const pages = [
@@ -54,13 +55,7 @@ export function Base({children}: BaseProps) {
           OpenCOOK
         </Button>
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          {pages.map(({name,route}) => (
-            <Button
-              key={name}
-              href={route}
-              variant={"text"}
-            >{name}</Button>
-          ))}
+          <UserNameButton variant={"contained"} color={"warning"}/>
         </Box>
       </Toolbar>
   </AppBar>
@@ -73,6 +68,7 @@ export function Base({children}: BaseProps) {
         <BottomNavigationAction label="Ingredientes" icon={<ShoppingCartRounded color={"action"}/>} href={baseURL + '/ingredients'} />
         <BottomNavigationAction label="Recetas" icon={<MenuBookRounded color={"action"}/>} href={baseURL + '/recipes'}/>
         <BottomNavigationAction label="Menús" icon={<RestaurantMenuRounded />} disabled/>
+        <BottomNavigationAction label="Más?" icon={<ListRounded color={"action"}/>} href={baseURL + '/plan'}/>
       </BottomNavigation>
     </Paper>
   </React.Fragment>
