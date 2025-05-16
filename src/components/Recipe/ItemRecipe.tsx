@@ -35,9 +35,9 @@ export function ItemRecipe(
       >{familyData.icon}</Avatar>
     </ListItemAvatar>
     <ListItemText
-      primary={name}
+      primary={`${name}`}
       secondary={<Typography variant={"caption"}>
-        {`${portions} porciones`}
+        {familyData.name}
       </Typography>}
     />
   </ListItem>)

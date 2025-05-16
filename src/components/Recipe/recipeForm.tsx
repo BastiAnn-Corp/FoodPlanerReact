@@ -21,6 +21,9 @@ import {RecipeStepForm} from "@/components/Recipe/Steps/RecipeStepForm";
 import {RecipeIngredientForm} from "@/components/Recipe/Ingredients/RecipeIngredientForm";
 import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
 import {createRecipe, validateRecipeCreation} from "@/lib/firebase/recipes";
+import {onAuthStateChanged} from "@firebase/auth";
+import {authApp} from "@/lib/firebase/firebase-config";
+import {UserNameButton} from "@/components/Auth/UserNameButton";
 
 export function RecipeForm() {
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
@@ -36,6 +39,22 @@ export function RecipeForm() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = React.useState<{severity: 'success' | 'error', message?: string}>({severity: "success"});
+  const [notes, setNotes] = useState<string>('')
+  const [creatorName, setCreatorName] = useState<string>("")
+  const [userUUID, setUserUUID] = useState<string>("")
+
+  useEffect(()=>{
+    onAuthStateChanged(authApp, (user) => {
+      if (user !== null) {
+        setCreatorName(user.displayName!)
+        setUserUUID(user.email!)
+      } else {
+        setMessage({severity: 'error', message: "Para guardar receta debe conectarse con su cuenta Google, haciendo click en el botón abajo, si ya se conectó refresque la pagina"})
+        setCreatorName("")
+        setUserUUID("")
+      }
+    });
+  }, [])
 
   useEffect(()=>{
     loadRawIngredients()
@@ -87,15 +106,18 @@ export function RecipeForm() {
 
   async function handleCreateRecipe () {
     setIsLoading(true)
-    const recipe:IRecipe = {
+    const recipe= {
       name: recipeName,
       portions: recipePortions,
       seasons: selectedSeasons as TSeasons[],
       family:recipeType as TFoodFamily,
       ingredients_list: listOfIngredients,
       steps: listOfSteps,
+      notes: notes,
+      creator: creatorName,
+      editors: [userUUID]
     }
-    if (validateRecipeCreation(recipe)){
+    if (validateRecipeCreation(recipe) && userUUID !== '') {
       const {error} = await createRecipe(recipe)
       setMessage({
         severity: error ? "error" : "success",
@@ -140,7 +162,7 @@ export function RecipeForm() {
         ))}
       </Select>
     </Grid2>
-    <Grid2 size={{ xs: 6, sm: 6, md: 8, lg:8, xl:8 }}>
+    <Grid2 size={{ xs: 6, sm: 6, md: 4, lg:4, xl:4 }}>
       <Typography>Tipo de receta</Typography>
       <Select variant={"outlined"} fullWidth
               value={recipeType}
@@ -163,6 +185,18 @@ export function RecipeForm() {
         }}
       />
     </Grid2>
+    <Grid2 size={{ xs: 6, sm: 6, md: 4, lg:4, xl:4 }}>
+      <Typography>Creado por</Typography>
+      <TextField
+        fullWidth
+        type={"string"}
+        variant={"outlined"}
+        value={creatorName}
+        onChange={(e)=>{
+          setCreatorName(e.target.value)
+        }}
+      />
+    </Grid2>
     <Grid2 size={6} container>
       <Accordion defaultExpanded>
         <AccordionSummary>
@@ -175,7 +209,7 @@ export function RecipeForm() {
             <Typography variant={"caption"} color={"textDisabled"}>
               Tu ingrediente no esta en la lista? Agregalo aquí <AddCircle
               fontSize={"small"}
-              onClick={()=>setAddRawIngredient(true)}
+              onClick={()=>setAddRawIngredient(userUUID !== "")}
             />
             </Typography>
             <RecipeIngredientForm
@@ -216,6 +250,20 @@ export function RecipeForm() {
       </Accordion>
 
     </Grid2>
+    <Grid2 size={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }}>
+      <Typography>Notas extra</Typography>
+      <TextField
+        fullWidth
+        type={"string"}
+        variant={"outlined"}
+        value={notes}
+        multiline
+        rows={4}
+        onChange={(e)=>{
+          setNotes(e.target.value)
+        }}
+      />
+    </Grid2>
     <Divider/>
  <Grid2 container size={12} spacing={2} direction={"row"}>
    {message.message ? <Grid2 size={12}>
@@ -232,6 +280,9 @@ export function RecipeForm() {
      >Volver</Button>
    </Grid2>
    <Grid2 size={6}>
+     {
+       userUUID === "" ? <UserNameButton fullWidth variant={"contained"}
+                                         size={"large"}/> :
      <Button
        fullWidth
        size={"large"}
@@ -239,10 +290,11 @@ export function RecipeForm() {
        disabled={
          recipeName === "" || selectedSeasons.length === 0 ||
          recipeType === "" || listOfIngredients.length === 0 ||
-         listOfSteps.length === 0 || isLoading
+         listOfSteps.length === 0 || isLoading || userUUID === ""
        }
        onClick={()=>{handleCreateRecipe()}}
      >{isLoading ? <CircularProgress/> : "Crear receta"}</Button>
+     }
    </Grid2>
  </Grid2>
 

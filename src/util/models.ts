@@ -54,6 +54,8 @@ export interface IRecipe extends DocumentData{
   ingredients_list: Array<IRecipeIngredient>;
   steps: Array<IRecipeStep>;
   notes?: string;
+  creator?: string;
+  editors?: string[];
 }
 
 export interface IMenu extends DocumentData {
