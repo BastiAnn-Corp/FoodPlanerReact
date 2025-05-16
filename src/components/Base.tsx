@@ -63,11 +63,10 @@ export function Base({children}: BaseProps) {
     <Container>
       {children}
     </Container>
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={4}>
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={6}>
       <BottomNavigation showLabels>
         <BottomNavigationAction label="Ingredientes" icon={<ShoppingCartRounded color={"action"}/>} href={baseURL + '/ingredients'} />
         <BottomNavigationAction label="Recetas" icon={<MenuBookRounded color={"action"}/>} href={baseURL + '/recipes'}/>
-        <BottomNavigationAction label="Menús" icon={<RestaurantMenuRounded />} disabled/>
         <BottomNavigationAction label="Más?" icon={<ListRounded color={"action"}/>} href={baseURL + '/plan'}/>
       </BottomNavigation>
     </Paper>

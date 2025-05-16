@@ -34,7 +34,7 @@ export const releases : IReleases[] = [
     version: 'v0.4',
     title: 'Agregar cuentas con permiso de edición',
     changes: fetchChanges('v0.4'),
-    show: false
+    show: true
   },
   {
     version: 'v1.0',
@@ -44,26 +44,14 @@ export const releases : IReleases[] = [
   },
   {
     version: 'v1.1',
-    title: 'Recetas: Paginación y filtro por nombre',
+    title: 'Paginación en listas',
     changes: fetchChanges('v1.1'),
     show: false
   },
   {
     version: 'v1.2',
-    title: 'Ingredientes: Paginación y filtro por nombre',
-    changes: fetchChanges('v1.2'),
-    show: false
-  },
-  {
-    version: 'v1.3',
     title: 'Armar carrito desde el menú',
-    changes: fetchChanges('v1.3'),
-    show: false
-  },
-  {
-    version: 'v1.4',
-    title: 'Ordenar carrito por tipo de ingrediente',
-    changes: fetchChanges('v1.4'),
+    changes: fetchChanges('v1.2'),
     show: false
   },
   {

@@ -10,7 +10,7 @@ export type TAisle = "lacteos-y-quesos"| "frutas-y-verduras" | "carniceria" | "f
   "bebidas-aguas-y-jugos" | "congelados" | "despensa" | "snack-dulces" | "panaderia-y-pasteleria" |
   "snack salados" | "botilleria" | "none"
 
-export type TMeasureUnits = "unidad" | "grs" | "ml" | "kg" | "lt" | "cdta" | "cda" | "tz"
+export type TMeasureUnits = "unidad" | "grs" | "ml" | "kg" | "lt" | "cdta" | "cda" | "tz" | "-"
 
 export const seasons = [
   {
@@ -218,5 +218,9 @@ export const measuerementUnits: ICategory[] = [
   {
     name: "Taza",
     id: "tz"
+  },
+  {
+    name: "a gusto",
+    id: "-"
   }
 ]

@@ -5,7 +5,7 @@ import {LogoutRounded} from "@mui/icons-material";
 import {useState} from "react";
 
 interface LogoutButtonProps extends ButtonProps {
-  userName: string;
+  username: string;
 }
 
 export function LogOutButton(props: LogoutButtonProps) {
@@ -28,7 +28,7 @@ export function LogOutButton(props: LogoutButtonProps) {
     endIcon={<LogoutRounded/>}
     onClick={() => {handleLogout()}}
   >
-    {props.userName}
+    {props.username}
     <Snackbar
       key={'logout-button'}
       open={(message !== '' || error !== '')}

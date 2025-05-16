@@ -1,7 +1,16 @@
 import {
-  AddCircle,
-  DeleteRounded, FilterAltRounded, KeyRounded,
-  ListAltRounded, LoginRounded, MenuBookRounded,
+  AddCircle, CalculateRounded,
+  DeleteRounded,
+  Filter1,
+  FilterAltRounded,
+  KeyRounded,
+  ListAltRounded,
+  LoginRounded, LowPriorityRounded,
+  MenuBookRounded,
+  PagesRounded,
+  PrivacyTipRounded,
+  ShareRounded,
+  ShoppingCartCheckoutRounded,
   UpdateRounded
 } from "@mui/icons-material";
 import {ReactElement} from "react";
@@ -56,7 +65,7 @@ export const listOfTodos : IToDo[] = [
   },
   {
     title: 'Eliminar receta',
-    done: false,
+    done: true,
     icon: <DeleteRounded/>,
     releaseVersion: 'v0.2.0',
   },
@@ -98,26 +107,87 @@ export const listOfTodos : IToDo[] = [
   },
   {
     title: 'Crear login/logout',
-    done: false,
+    done: true,
     icon: <LoginRounded/>,
     releaseVersion: 'v0.4.0',
   },
   {
     title: 'Logica de permisos en formularios recetas',
-    done: false,
+    done: true,
     icon: <KeyRounded/>,
     releaseVersion: 'v0.4.1',
   },
   {
     title: 'Logica de permisos en formularios ingredientes',
-    done: false,
+    done: true,
     icon: <KeyRounded/>,
     releaseVersion: 'v0.4.2',
   },
   {
-    title: 'Listar menús',
+    title: 'Listar menús propios',
     done: false,
     icon: <ListAltRounded/>,
     releaseVersion: 'v1.0.0',
+  },
+  {
+    title: 'Crear menús con recetas por día',
+    done: false,
+    icon: <AddCircle/>,
+    releaseVersion: 'v1.0.0',
+  },
+  {
+    title: 'Crear menús públicos',
+    done: false,
+    icon: <PrivacyTipRounded/>,
+    releaseVersion: 'v1.0.0',
+  },
+  {
+    title: 'Compartir menús privados',
+    done: false,
+    icon: <ShareRounded/>,
+    releaseVersion: 'v1.0.0',
+  },
+  {
+    title: 'Listar menús compartidos',
+    done: false,
+    icon: <ListAltRounded/>,
+    releaseVersion: 'v1.0.0',
+  },
+  {
+    title: 'Paginación en recetas',
+    done: false,
+    icon: <Filter1/>,
+    releaseVersion: 'v1.1.0',
+  },
+  {
+    title: 'Paginación en ingredientes',
+    done: false,
+    icon: <Filter1/>,
+    releaseVersion: 'v1.1.0',
+  },
+  {
+    title: 'Paginación en menús',
+    done: false,
+    icon: <Filter1/>,
+    releaseVersion: 'v1.1.0',
+  },
+
+  {
+    title: 'Desde menús, tomar recetas y listar ingredientes necesarios',
+    done: false,
+    icon: <ShoppingCartCheckoutRounded/>,
+    releaseVersion: 'v1.2.0',
+  },
+  {
+    title: 'De la lista sumar cantidades por ingrediente y simplificar la lista',
+    done: false,
+    icon: <CalculateRounded/>,
+    releaseVersion: 'v1.2.0',
+  },
+  {
+    title: 'Ordenar lista por tipo de ingrediente',
+    done: false,
+    icon: <LowPriorityRounded/>,
+    releaseVersion: 'v1.2.0',
   },
 ]
