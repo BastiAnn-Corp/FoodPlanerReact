@@ -1,6 +1,6 @@
 "use client"
 import {Button, ButtonProps, Snackbar} from "@mui/material";
-import {authApp, firebaseConfig} from "@/lib/firebase/firebase-config";
+import {authApp} from "@/lib/firebase/firebase-config";
 import {GoogleAuthProvider, signInWithPopup} from "@firebase/auth";
 import {Google} from "@mui/icons-material";
 import {useState} from "react";
@@ -12,7 +12,6 @@ export function LogInButton(props: ButtonProps) {
   async function handleLogin () {
     setMessage('')
     setError('')
-    console.log(process.env.FIREBASE_API_KEY)
     const provider = new GoogleAuthProvider();
     try {
 
