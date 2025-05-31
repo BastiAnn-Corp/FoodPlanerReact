@@ -11,7 +11,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import {baseURL, foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
+import {foodFamilies, seasons, TFoodFamily, TSeasons} from "@/util/constants";
 import {IIngredient, IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
 import {AddCircle, AutoStoriesRounded, ShoppingCartRounded} from "@mui/icons-material";
 import {getIngredients} from "@/lib/firebase/ingredients";
@@ -24,6 +24,7 @@ import {createRecipe, validateRecipeCreation} from "@/lib/firebase/recipes";
 import {onAuthStateChanged} from "@firebase/auth";
 import {authApp} from "@/lib/firebase/firebase-config";
 import {UserNameButton} from "@/components/Auth/UserNameButton";
+import {envVars} from "@/util/config";
 
 export function RecipeForm() {
   const [selectedSeasons, setSelectedSeasons] = React.useState<string[]>([]);
@@ -276,7 +277,7 @@ export function RecipeForm() {
        variant={"contained"}
        color={"inherit"}
        disabled={isLoading}
-       href={baseURL + '/recipes'}
+       href={envVars.baseURL + '/recipes'}
      >Volver</Button>
    </Grid2>
    <Grid2 size={6}>

@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import React, {useState} from "react";
 import {ListRounded, MenuBookRounded, RestaurantMenuRounded, ShoppingCartRounded} from "@mui/icons-material";
-import {baseURL} from "@/util/constants";
+
 import {UserNameButton} from "@/components/Auth/UserNameButton";
 import Link from "next/link";
+import {envVars} from "@/util/config";
 
 
 const pages = [
@@ -116,7 +117,7 @@ export function Base({children}: BaseProps) {
             key={`bottom-menu-${name.toLowerCase()}`}
             label={name}
             icon={icon}
-            href={baseURL + route}/>
+            href={envVars.baseURL + route}/>
         })}
       </BottomNavigation>
     </Paper>

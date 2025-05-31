@@ -68,7 +68,6 @@ export async function createIngredient(args: ICreateIngredient): Promise<createD
     )
     return {data: docRef.id};
   } catch (error) {
-    console.log(error);
     const err = error as FirestoreError;
     return {
       data: null,

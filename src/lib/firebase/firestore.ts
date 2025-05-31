@@ -79,7 +79,6 @@ export async function getConvertedDocs({
     }));
     return data;
   } catch (error) {
-    console.log(error)
     return []
   }
 

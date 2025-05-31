@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {getAuth} from "@firebase/auth";
+import {envVars} from "@/util/config";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,13 +10,13 @@ import {getAuth} from "@firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY || "apiKey",
+  apiKey: envVars.apiKey,
   authDomain: "camino-del-nom.firebaseapp.com",
   projectId: "camino-del-nom",
   storageBucket: "camino-del-nom.firebasestorage.app",
-  messagingSenderId: process.env.MESSAGING_SENDER_ID || "messagingSenderId",
-  appId: process.env.APP_ID || "appId",
-  measurementId: process.env.MEASUREMENT_ID || "measurementId",
+  messagingSenderId: envVars.messagingSenderId,
+  appId: envVars.appId,
+  measurementId: envVars.measurementId,
 };
 
 

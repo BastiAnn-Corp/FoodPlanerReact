@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
-import {baseURL, foodFamilies, seasons} from "@/util/constants";
+import { foodFamilies, seasons} from "@/util/constants";
 import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
 import {Base} from "@/components/Base";
 import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
+import {envVars} from "@/util/config";
 
 export default function Recipes() {
   const [recipes, setRecipes] = React.useState<IRecipe[]>([]);
@@ -50,7 +51,6 @@ export default function Recipes() {
     }
     setIsLoading(true)
     const response = await getRecipes(filters)
-    console.log('renderRecipes', response)
     if (filterName !== ""){
       response.filter((item)=>{
         return item.name.toLowerCase().includes(filterName.toLowerCase())
@@ -100,7 +100,7 @@ export default function Recipes() {
           startIcon={<AddCircle/>}
           size={"small"}
           fullWidth
-          href={baseURL + '/recipes/create'}
+          href={envVars.baseURL + '/recipes/create'}
         >Nueva receta</Button>
       </Grid2>
     </Grid2>

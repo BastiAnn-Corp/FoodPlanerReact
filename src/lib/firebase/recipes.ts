@@ -27,11 +27,9 @@ export async function getRecipes({id, name, season, family} : IFilterRecipes) : 
         q = query(q, where("id", '==', id));
       }
       if(season){
-        console.log('getRecipes filters: season ', season);
         q = query(q, where("seasons", 'array-contains', season.toLowerCase()));
       }
       if(family){
-        console.log('getRecipes filters: family ', family);
         q = query(q, where("family", '==', family.toLowerCase()));
       }
       q = query(q, orderBy("name"));
@@ -39,13 +37,10 @@ export async function getRecipes({id, name, season, family} : IFilterRecipes) : 
     }
     const recipes = await getConvertedDocs({
       coll : {collection: collName, converter}, queryFilters : filterRecipes})
-    console.log('getRecipes',recipes);
-    console.info('getRecipes',recipes.length);
     return recipes.map((doc)=>{
       return doc as IRecipe
     })
   } catch (error) {
-    console.error('getRecipes', error);
     return []
   }
 }
@@ -83,7 +78,6 @@ export async function createRecipe(args: ICreateRecipeInput): Promise<createDocO
     )
     return {data: docRef.id};
   } catch(error) {
-    console.log('createRecipe', error);
     const err = error as FirestoreError;
     return {
       data: null,
@@ -98,7 +92,6 @@ export async function deleteRecipe(documentId:string): Promise<string> {
     await deleteDoc(docRef)
     return `Receta eliminada`
   } catch (error) {
-    console.error(`deleteRecipe: ${documentId}`, error);
     const err = error as FirestoreError;
     return `Error: ${err.name}: ${err.message}`
   }

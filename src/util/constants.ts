@@ -1,6 +1,4 @@
 import {ICategory} from "@/util/models";
-
-export const baseURL = '/FoodPlanerReact'
 export type TSeasons = "summer" | "winter" | "spring" | "autum"
 export type TFoodFamily = "starters" | "veggies" | "carbs" |
   "fish" | "birds" | "meat" | "beans" | "desserts" | "bakery" |

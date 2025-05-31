@@ -1,0 +1,17 @@
+export function getEnvOrDefault(keyName: string, envVal: string | undefined = undefined, defaultValue: string = ''):string {
+  const envValue = process.env[keyName] || envVal;
+  console.info(`Searching for ${keyName}`)
+  if (envValue === undefined){
+    console.debug(`${keyName} is undefined: using `, defaultValue)
+    return defaultValue;
+  }
+  return envValue;
+}
+
+export const envVars = {
+  baseURL: getEnvOrDefault("NEXT_PUBLIC_BASE_URL" , '/FoodPlanerReact'),
+  apiKey: getEnvOrDefault("NEXT_PUBLIC_FIREBASE_API_KEY", process.env.NEXT_PUBLIC_FIREBASE_API_KEY),
+  messagingSenderId: getEnvOrDefault("NEXT_PUBLIC_MESSAGING_SENDER_ID", process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID),
+  appId: getEnvOrDefault("NEXT_PUBLIC_APP_ID", process.env.NEXT_PUBLIC_APP_ID),
+  measurementId: getEnvOrDefault("NEXT_PUBLIC_MEASUREMENT_ID", process.env.NEXT_PUBLIC_MEASUREMENT_ID),
+}
