@@ -1,7 +1,7 @@
 export function getEnvOrDefault(keyName: string, envVal: string | undefined = undefined, defaultValue: string = ''):string {
   const envValue = process.env[keyName] || envVal;
   console.info(`Searching for ${keyName}`)
-  if (envValue === undefined){
+  if (envValue === undefined && envValue !== ''){
     console.debug(`${keyName} is undefined: using `, defaultValue)
     return defaultValue;
   }
