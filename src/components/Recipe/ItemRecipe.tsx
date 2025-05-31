@@ -26,7 +26,6 @@ export function ItemRecipe(
   const familyData = familyEmoji()
 
   return (<ListItem
-    dense
   >
     <ListItemAvatar>
       <Avatar

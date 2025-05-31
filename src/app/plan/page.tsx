@@ -2,6 +2,8 @@ import React from "react";
 import {Base} from "@/components/Base";
 import {AccordionRelease} from "@/components/Releases/AccordionRelease";
 import {Grid2, Paper, Typography} from "@mui/material";
+import {CarrouselWithStepper} from "@/components/Common/CarrouselWithStepper";
+import {tipsOfUsage} from "@/app/plan/tipsOfUsage";
 
 export default function Home() {
 
@@ -25,7 +27,7 @@ export default function Home() {
           </Paper>
         </Grid2>
       </Grid2>
-
+      <CarrouselWithStepper elementsToShow={2} paperContent={tipsOfUsage}/>
       <AccordionRelease/>
     </Base>
     );
