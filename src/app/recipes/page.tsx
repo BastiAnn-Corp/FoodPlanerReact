@@ -35,30 +35,42 @@ export default function Recipes() {
   },[refresh])
 
   function liveFilterPerNameOrIngredient(recipe: IRecipe) : boolean{
+    if (filterName == ""){
+      return true
+    }
     const isPerName = recipe.name.toLowerCase().includes(filterName.toLowerCase())
     const ingredientNames : string[] = recipe.ingredients_list.map((ing)=> ing.ingredient.name)
     const inIngredients = ingredientNames.join(',').toLowerCase().includes(filterName.toLowerCase())
     return isPerName || inIngredients
   }
 
-  async function loadRecipes() {
-    const filters: IFilterRecipes = {}
-    if (filterSeason !== ""){
-      filters.season = filterSeason
+  function liveFilterFamily(recipe: IRecipe) : boolean{
+    if (filterFamily === ''){
+      return true
+    } else {
+      return filterFamily.includes(recipe.family)
     }
-    if (filterFamily !== ""){
-      filters.family = filterFamily
-    }
-    setIsLoading(true)
-    const response = await getRecipes(filters)
-    if (filterName !== ""){
-      response.filter((item)=>{
-        return item.name.toLowerCase().includes(filterName.toLowerCase())
+  }
+
+  function liveFilterSeason(recipe: IRecipe) : boolean{
+    if (filterSeason === ''){
+      return true
+    } else {
+      let inFilter = false
+      recipe.seasons.forEach((s)=>{
+        if (filterSeason.includes(s)){
+          inFilter = true
+        }
       })
+      return inFilter
     }
-    setRecipes(response.filter((item)=>{
-      return filterName !== "" ? liveFilterPerNameOrIngredient(item) : true
-    }))
+  }
+
+  async function loadRecipes() {
+    setIsLoading(true)
+    const response = await getRecipes({})
+    setRecipes(response)
+    console.debug(`Found ${response.length} recipes`)
     setIsLoading(false)
   }
 
@@ -126,7 +138,6 @@ export default function Recipes() {
         />
         <Grid2 container direction={"row"}>
           <Grid2>
-            {renderSeasonFilter()}
             {renderFoodFamilyFilter()}
           </Grid2>
         </Grid2>
@@ -134,7 +145,11 @@ export default function Recipes() {
       </Grid2>
       <Grid2 size={{xs: 6, sm: 6, md: 10, lg:10, xl:10}}>
         <List key={'recipe-list'}>
-          {recipes.map((r,index)=>{
+          {recipes
+            .filter((i)=>{return liveFilterPerNameOrIngredient(i)})
+            .filter((i)=>{return liveFilterFamily(i)})
+            .filter((i)=>{return liveFilterSeason(i)})
+            .map((r,index)=>{
             return <AccordionRecipe
               key={`recipe-${index}`}
               recipe={r}
