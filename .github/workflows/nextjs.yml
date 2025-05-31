@@ -32,6 +32,7 @@ jobs:
   # Build job
   build:
     if: ${{ github.ref == 'refs/heads/main' }}
+    environment: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
