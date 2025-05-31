@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import {envVars} from "@/util/config";
 
 const nextConfig: NextConfig = {
   /* config options here */
