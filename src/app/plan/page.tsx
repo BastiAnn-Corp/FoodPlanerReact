@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <Base>
-      <Grid2 container direction={"row"} marginBottom={5} justifyContent={"center"}>
+      <Grid2 container direction={"row"} marginBottom={5} justifyContent={"center"} columns={{ xs: 8, sm: 8, md: 12, lg:12, xl:12 }}>
         <Grid2 size={8}>
           <Paper elevation={2} style={{padding:10}}>
             <Typography variant={"h4"} color={"secondary"}>
