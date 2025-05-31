@@ -37,7 +37,6 @@ export default function Ingredients(){
     }
     setIsLoading(true)
     const response = await getIngredients(filters)
-    console.log('renderItems', response)
     if (filterName !== ""){
       response.filter((item)=>{
         return item.name.toLowerCase().includes(filterName.toLowerCase())
@@ -113,5 +112,4 @@ export default function Ingredients(){
       </Grid2>
     </Grid2>
   </Base>);
-
 }

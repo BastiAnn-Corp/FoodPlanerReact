@@ -51,7 +51,6 @@ export default function Recipes() {
     }
     setIsLoading(true)
     const response = await getRecipes(filters)
-    console.log('renderRecipes', response)
     if (filterName !== ""){
       response.filter((item)=>{
         return item.name.toLowerCase().includes(filterName.toLowerCase())

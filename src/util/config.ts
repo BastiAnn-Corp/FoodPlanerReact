@@ -9,7 +9,7 @@ export function getEnvOrDefault(keyName: string, envVal: string | undefined = un
 }
 
 export const envVars = {
-  baseURL: getEnvOrDefault("NEXT_PUBLIC_BASE_URL" , '/FoodPlanerReact'),
+  baseURL: '/FoodPlanerReact',
   apiKey: getEnvOrDefault("NEXT_PUBLIC_FIREBASE_API_KEY", process.env.NEXT_PUBLIC_FIREBASE_API_KEY, "apiKey"),
   messagingSenderId: getEnvOrDefault("NEXT_PUBLIC_MESSAGING_SENDER_ID", process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID, "senderId"),
   appId: getEnvOrDefault("NEXT_PUBLIC_APP_ID", process.env.NEXT_PUBLIC_APP_ID, "appId"),
