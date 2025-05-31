@@ -5,7 +5,6 @@ export function getEnvOrDefault(keyName: string, envVal: string | undefined = un
     console.debug(`${keyName} is undefined: using `, defaultValue)
     return defaultValue;
   }
-  console.debug(`Env ${keyName} = ${envValue}`)
   return envValue;
 }
 
