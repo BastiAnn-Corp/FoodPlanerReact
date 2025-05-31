@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "export",  // <=== enables static exports
   reactStrictMode: true,
-  basePath: envVars.baseURL,
+  basePath: '/FoodPlanerReact',
 };
 
 export default nextConfig;
