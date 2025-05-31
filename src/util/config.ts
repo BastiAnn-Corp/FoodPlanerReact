@@ -1,7 +1,7 @@
 export function getEnvOrDefault(keyName: string, envVal: string | undefined = undefined, defaultValue: string = ''):string {
   const envValue = process.env[keyName] || envVal;
   console.info(`Searching for ${keyName}`)
-  if (envValue === undefined && envValue !== ''){
+  if (!envValue){
     console.debug(`${keyName} is undefined: using `, defaultValue)
     return defaultValue;
   }
@@ -10,10 +10,10 @@ export function getEnvOrDefault(keyName: string, envVal: string | undefined = un
 }
 
 export async function getStaticProps() {
-  console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
-  console.log(process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID);
-  console.log(process.env.NEXT_PUBLIC_APP_ID);
-  console.log(process.env.NEXT_PUBLIC_MEASUREMENT_ID);
+  console.debug('Static:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
+  console.debug('Static:',process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID);
+  console.debug('Static:',process.env.NEXT_PUBLIC_APP_ID);
+  console.debug('Static:',process.env.NEXT_PUBLIC_MEASUREMENT_ID);
 }
 export const envVars = {
   baseURL: '/FoodPlanerReact',
