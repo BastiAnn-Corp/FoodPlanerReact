@@ -1,5 +1,6 @@
-import {Chip, Paper, Typography} from "@mui/material";
+import {Button, Chip, Paper, Snackbar, Typography} from "@mui/material";
 import {potText, robotCookText} from "@/util/convertions";
+import {Google} from "@mui/icons-material";
 
 export const tipsOfUsage = [
   <Paper key='tip-of-robot' elevation={3} style={{padding:10}}>
@@ -50,5 +51,22 @@ export const tipsOfUsage = [
       - Temperatura en 3 niveles: Bajo 🔥◼️◼️, Medio 🔥🔥️◼️ y Alto 🔥🔥️🔥️
     </Typography>
   </Paper>
+  ,
+  <Paper key='tip-of-login' elevation={3} style={{padding:10}}>
+    <Typography color={"primary"} align={"center"} variant={"h6"}>
+      <b>Inciar sesión con</b>
+      <br/>
+      tu Cuenta Google
+      <br/>
+      <Button color={"warning"} variant={"contained"}
+        startIcon={<Google/>}
+      >
+        Conectarse
+      </Button>
+    </Typography>
 
+    <Typography><br/>
+      Para ver recetas y menús publicos no es necesario iniciar sesión, pero para crear recetas, menús y carritos si será necesario que entres con tu cuenta gmail
+    </Typography>
+  </Paper>
 ]

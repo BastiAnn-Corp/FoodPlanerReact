@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, {useState} from "react";
 import {
-  ListRounded,
+  Apple, AssignmentRounded,
   MenuBookRounded,
   MenuRounded,
   RestaurantMenuRounded,
@@ -23,13 +23,6 @@ import {envVars} from "@/util/config";
 
 const pages = [
   {
-    name: "Ingredientes",
-    route: "/ingredients",
-    icon: <ShoppingCartRounded/>,
-    enabled: true,
-    inBottomBar: false,
-  },
-  {
     name: "Recetas",
     route: "/recipes",
     icon: <MenuBookRounded/>,
@@ -42,11 +35,24 @@ const pages = [
     icon: <RestaurantMenuRounded/>,
     enabled: false,
     inBottomBar: true,
+  },{
+    name: "Ingredientes",
+    route: "/ingredients",
+    icon: <Apple/>,
+    enabled: false,
+    inBottomBar: false,
   },
   {
-    name: "Más...",
+    name: "Mi lista",
+    route: "/shopping",
+    icon: <ShoppingCartRounded/>,
+    enabled: false,
+    inBottomBar: false,
+  },
+  {
+    name: "Sobre la app",
     route: "/plan",
-    icon: <ListRounded/>,
+    icon: <AssignmentRounded/>,
     enabled: true,
     inBottomBar: false,
   },
