@@ -8,6 +8,12 @@ export function getEnvOrDefault(keyName: string, envVal: string | undefined = un
   return envValue;
 }
 
+export async function getStaticProps() {
+  console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
+  console.log(process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID);
+  console.log(process.env.NEXT_PUBLIC_APP_ID);
+  console.log(process.env.NEXT_PUBLIC_MEASUREMENT_ID);
+}
 export const envVars = {
   baseURL: '/FoodPlanerReact',
   apiKey: getEnvOrDefault("NEXT_PUBLIC_FIREBASE_API_KEY", process.env.NEXT_PUBLIC_FIREBASE_API_KEY, "apiKey"),
