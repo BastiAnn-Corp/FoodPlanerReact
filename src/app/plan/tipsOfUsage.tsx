@@ -2,7 +2,7 @@ import {Chip, Paper, Typography} from "@mui/material";
 import {potText, robotCookText} from "@/util/convertions";
 
 export const tipsOfUsage = [
-  <Paper elevation={3} style={{padding:10}}>
+  <Paper key='tip-of-robot' elevation={3} style={{padding:10}}>
     <Typography color={"info"} align={"center"} variant={"h6"}>
       <b>Instrucciones para robot de cocina</b>
       <br/>
@@ -26,7 +26,7 @@ export const tipsOfUsage = [
       - 🌡️ Temperatura en grados celcius, va desde 0 hasta 130
     </Typography>
   </Paper>,
-  <Paper elevation={3} style={{padding:10}}>
+  <Paper key='tip-of-mahcines' elevation={3} style={{padding:10}}>
     <Typography color={"warning"} align={"center"} variant={"h6"}>
       <b>Instrucciones con máquinas de cocina</b>
       <br/>
