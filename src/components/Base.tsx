@@ -8,7 +8,13 @@ import {
   Toolbar, Typography, useMediaQuery, useTheme
 } from "@mui/material";
 import React, {useState} from "react";
-import {ListRounded, MenuBookRounded, RestaurantMenuRounded, ShoppingCartRounded} from "@mui/icons-material";
+import {
+  ListRounded,
+  MenuBookRounded,
+  MenuRounded,
+  RestaurantMenuRounded,
+  ShoppingCartRounded
+} from "@mui/icons-material";
 
 import {UserNameButton} from "@/components/Auth/UserNameButton";
 import Link from "next/link";
@@ -77,7 +83,7 @@ export function Base({children}: BaseProps) {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         >
-          <RestaurantMenuRounded />
+          <MenuRounded />
         </IconButton>
         <Menu
           id="basic-menu"
@@ -101,7 +107,7 @@ export function Base({children}: BaseProps) {
           })}
         </Menu>
         <Typography component="div" sx={{ flexGrow: 1 }}>
-          OpenCOOK
+          <RestaurantMenuRounded/> OpenCOOK
         </Typography>
         <UserNameButton variant={"contained"} color={"warning"}/>
       </Toolbar>
