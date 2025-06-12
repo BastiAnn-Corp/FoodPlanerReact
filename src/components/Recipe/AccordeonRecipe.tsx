@@ -14,12 +14,13 @@ import {
 import {ItemRecipe} from "@/components/Recipe/ItemRecipe";
 import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
 import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
-import { KeyboardArrowDownRounded, ModeEditRounded} from "@mui/icons-material";
+import {EditRounded, KeyboardArrowDownRounded, ModeEditRounded} from "@mui/icons-material";
 import {DeleteButton} from "@/components/Common/DeleteButton";
 import {deleteRecipe} from "@/lib/firebase/recipes";
 import {useEffect, useState} from "react";
 import {onAuthStateChanged} from "@firebase/auth";
 import {authApp} from "@/lib/firebase/firebase-config";
+import {envVars} from "@/util/config";
 
 interface AccordionRecipeProps {
   refreshAction: ()=>void
@@ -90,6 +91,13 @@ export function AccordionRecipe({recipe, index, refreshAction}: AccordionRecipeP
     <AccordionActions disableSpacing>
       {userUUID === "" ? <></> :
       <Grid2 container direction={"row"} spacing={1} justifyContent={"space-between"} >
+        <Grid2>
+          <Button
+            href={envVars.baseURL+`/recipes/${recipe.id}`}
+            variant={"contained"}
+            startIcon={<EditRounded/>}
+          >Editar</Button>
+        </Grid2>
         <Grid2 size={"grow"}>
           <DeleteButton
             variant={"contained"}

@@ -11,10 +11,11 @@ import {
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
 import {foodFamilies, seasons} from "@/util/constants";
-import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
+import {getAllRecipesIds, getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
 import {Base} from "@/components/Base";
 import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
 import {envVars} from "@/util/config";
+
 
 export default function Recipes() {
   const [recipes, setRecipes] = React.useState<IRecipe[]>([]);

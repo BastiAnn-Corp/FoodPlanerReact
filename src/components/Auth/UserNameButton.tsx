@@ -23,6 +23,6 @@ export function UserNameButton(props: ButtonProps) {
   }, [])
 
   return userData !== null ?
-    <LogOutButton username={userName} {...props}/> :
+    <LogOutButton username={userName.split(" ")[0]} {...props}/> :
     <LogInButton {...props}/>
 }

@@ -1,5 +1,16 @@
 import {IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
-import {addDoc, collection, deleteDoc, doc, FirestoreError, orderBy, query, Query, where} from "@firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  FirestoreError,
+  getDoc,
+  orderBy,
+  query,
+  Query,
+  where
+} from "@firebase/firestore";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {TFoodFamily, TSeasons} from "@/util/constants";
@@ -18,6 +29,34 @@ export interface IFilterRecipes {
   family?: string;
   limit?: number;
   page?: number;
+}
+
+export async function getAllRecipesIds() {
+  try {
+    const recipes = await getConvertedDocs({
+      coll : {collection: collName, converter}})
+    return recipes.map((doc)=>{
+      const recipe = doc.data() as IRecipe
+      return {
+        params: {
+          id: recipe.id,
+        },
+      };
+    })
+  } catch (error) {
+    return []
+  }
+}
+
+export async function getRecipeById(id: string): Promise<IRecipe|undefined> {
+  try {
+    const docRef = doc(firestoreDB, collName, id)
+    const snap = await getDoc(docRef)
+    console.debug(snap.data())
+    return snap.data() as IRecipe;
+  } catch (error) {
+    return undefined
+  }
 }
 
 export async function getRecipes({id, name, season, family} : IFilterRecipes) : Promise<IRecipe[]> {
