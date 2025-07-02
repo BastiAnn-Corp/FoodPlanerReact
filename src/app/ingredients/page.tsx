@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {ItemIngredient} from "@/components/Ingredients/ItemIngredient";
-import {Base} from "@/components/Base";
 import {ModalAddIngredient} from "@/components/Ingredients/modalAddIngredient";
 
 export default function Ingredients(){
@@ -59,7 +58,7 @@ export default function Ingredients(){
     })
   }
 
-  return (<Base>
+  return (<>
     <Grid2 container spacing={1} justifyContent={"space-between"} >
       <Grid2 size={4}>
         <Typography variant={"h3"}> Ingredientes </Typography>
@@ -111,5 +110,5 @@ export default function Ingredients(){
         </List>
       </Grid2>
     </Grid2>
-  </Base>);
+  </>);
 }

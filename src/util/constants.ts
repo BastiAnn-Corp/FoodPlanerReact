@@ -3,7 +3,7 @@ export type TSeasons = "summer" | "winter" | "spring" | "autum"
 export type TFoodFamily = "starters" | "veggies" | "carbs" |
   "fish" | "birds" | "meat" | "beans" | "desserts" | "bakery" |
   "others"
-export type TPotProgram = 'asar' | 'vaporera' | 'airfryer' | 'sofrito' | 'sopa' | 'hervir' | 'coxionlenta'
+export type TPotProgram = 'asar' | 'vaporera' | 'airfryer' | 'sofrito' | 'sopa' | 'hervir' | 'coxionlenta' | 'liquadora' | 'procesadora' | 'amasadora'
 export type TAisle = "lacteos-y-quesos"| "frutas-y-verduras" | "carniceria" | "fiambreria-y-encurtidos" | "pescaderia" |
   "bebidas-aguas-y-jugos" | "congelados" | "despensa" | "snack-dulces" | "panaderia-y-pasteleria" |
   "snack salados" | "botilleria" | "none"
@@ -96,10 +96,7 @@ export const potPrograms: ICategory[] = [
   },{
     name: 'Freidora de Aire',
     id: 'airfryer'
-  },{
-    name: 'Sofrito',
-    id: 'sofrito'
-  },{
+  }, {
     name: 'Sopa',
     id: 'sopa'
   },{
@@ -108,6 +105,15 @@ export const potPrograms: ICategory[] = [
   },{
     name: 'Cocción Lenta',
     id: 'coxionlenta'
+  },{
+    name: 'Liquadora',
+    id:  'liquadora',
+  },{
+    name: 'Procesadora',
+    id: 'procesadora'
+  },{
+    name: 'Amasadora',
+    id: 'amasadora'
   }
 ]
 

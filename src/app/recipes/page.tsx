@@ -11,10 +11,10 @@ import {
 import {AddCircle, SearchRounded} from "@mui/icons-material";
 import {IRecipe} from "@/util/models";
 import {foodFamilies, seasons} from "@/util/constants";
-import {getRecipes, IFilterRecipes} from "@/lib/firebase/recipes";
-import {Base} from "@/components/Base";
+import {getRecipes} from "@/lib/firebase/recipes";
 import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
 import {envVars} from "@/util/config";
+
 
 export default function Recipes() {
   const [recipes, setRecipes] = React.useState<IRecipe[]>([]);
@@ -100,7 +100,7 @@ export default function Recipes() {
     })
   }
 
-  return (<Base>
+  return (<>
     <Grid2 container spacing={1} padding={1} justifyContent={"space-between"}>
       <Grid2 size={4}>
         <Typography variant={"h3"}> Recetas </Typography>
@@ -160,5 +160,5 @@ export default function Recipes() {
         </List>
       </Grid2>
     </Grid2>
-  </Base>);
+  </>);
 }

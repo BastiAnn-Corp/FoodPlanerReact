@@ -3,6 +3,7 @@ import "./globals.css";
 
 import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
 import { StyledRoot } from './StyledRoot';
+import { Base } from "@/components/Base";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default function RootLayout({
         className={`antialiased`}
       >
       <AppRouterCacheProvider>
-        <StyledRoot>{children}</StyledRoot>
+        <StyledRoot>
+          <Base>{children}</Base>
+        </StyledRoot>
       </AppRouterCacheProvider>
       </body>
     </html>
