@@ -12,7 +12,7 @@ import {ItemRecipeIngredient} from "@/components/Recipe/Steps/ItemRecipeIngredie
 import {AuthorCard} from "@/components/Recipe/AuthorCard";
 import {PortionsCard} from "@/components/Recipe/PortionsCard";
 import {RecipeTitleAndTagsCard} from "@/components/Recipe/RecipeTitleAndTagsCard";
-export default async function RecipeDetailPage(
+export default async function Page(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
@@ -53,5 +53,6 @@ export default async function RecipeDetailPage(
         </List>
       </Grid2>
     </Grid2>
-
 }
+
+function generateStaticParams() {}
