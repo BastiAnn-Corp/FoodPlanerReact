@@ -1,71 +1,64 @@
 "use client"
 import {IRecipeStep} from "@/util/models";
-import {Checkbox, Chip, Grid2, IconButton, Paper, Typography} from "@mui/material";
+import {
+  Checkbox,
+  Chip,
+  Grid2,
+  IconButton,
+  ListItem, ListItemButton, ListItemIcon,
+  ListItemProps,
+  ListItemText,
+  Paper,
+  Typography
+} from "@mui/material";
 import {Delete} from "@mui/icons-material";
-import React, {useEffect} from "react";
+import React, {ReactNode, useEffect} from "react";
 import {potText, robotCookText} from "@/util/convertions";
+import {InstructionChip} from "@/components/Recipe/Steps/InstructionChip";
 
-interface ItemRecipeStepProps {
+interface ItemRecipeStepProps extends ListItemProps{
   step: IRecipeStep;
   index: number;
+  editing?: {
+    active: boolean,
+    updateStep: (step: IRecipeStep) => void,
+  }
   deleteStep?: (step: IRecipeStep) => void;
 }
 
-export function ItemRecipeStep({step, index, deleteStep}: ItemRecipeStepProps) {
+export function ItemRecipeStep(props: ItemRecipeStepProps) {
+  const {
+    step,
+    index,
+    deleteStep
+  } = props
+
   useEffect(() => {
 
   }, [step, index]);
 
-  const primaryText = ():string => {
-    return `${index+1}. ${step.instructions}`
-  }
-
-  const secondaryText = () => {
-    const texts = [
-      potText(step),
-      robotCookText(step)
-    ]
-    const chips = []
-    if (texts[0] !== ''){
-      chips.push(<Chip
-        key={`instruction-cooking-pot-${index}`}
-        label={texts[0]}
-        color={"warning"}
-        size={"small"} style={{marginRight: 5}}
-      />)
-    }
-    if (texts[1] !== ''){
-      chips.push(<Chip
-        key={`instruction-cooking-robot-${index}`}
-        label={texts[1]}
-        color={"info"}
-        size={"small"} style={{marginRight: 5}}
-      />)
-    }
-    return chips
+  function renderContent(): ReactNode{
+    return <ListItem {...props}>
+      <ListItemIcon>
+        {deleteStep ?
+          <Delete fontSize={"small"} onClick={()=>{deleteStep(step)}}/>
+          :
+          <Checkbox size={"small"}/>
+        }
+      </ListItemIcon>
+      <ListItemText>
+        {`${index+1}. ${step.instructions}`} <br/>
+        <InstructionChip step={step} type={'machine'} key={`instruction-machine-${index}`}/>
+        <InstructionChip step={step} type={'robot'} key={`instruction-robot-${index}`}/>
+      </ListItemText>
+    </ListItem>
   }
 
   return (<Paper
     elevation={1}
     variant="outlined"
-    style={{padding: 5, marginTop: 3}}
+    style={{padding: 2, marginTop: 3}}
   >
-    <Grid2 container direction={"row"} spacing={2} justifyContent={"space-around"}>
-      <Grid2 size={8}>
-        <Typography>{primaryText()}</Typography>
-        {secondaryText().map((chip)=>{
-          return chip
-        })}
-      </Grid2>
-      {deleteStep ?
-        <Grid2 justifyContent={"right"} alignContent={"center"}>
-          <IconButton edge="end" aria-label="delete" onClick={()=>{deleteStep(step)}}>
-            <Delete/>
-          </IconButton>
-        </Grid2>: <Grid2 alignContent={"center"}>
-          <Checkbox/>
-        </Grid2>
-      }
-    </Grid2>
+    {renderContent()}
   </Paper>)
 }

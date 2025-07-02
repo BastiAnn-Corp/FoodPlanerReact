@@ -1,5 +1,4 @@
 import React from "react";
-import {Base} from "@/components/Base";
 import {AccordionRelease} from "@/components/Releases/AccordionRelease";
 import {Grid2, Paper, Typography} from "@mui/material";
 import {CarrouselWithStepper} from "@/components/Common/CarrouselWithStepper";
@@ -8,7 +7,7 @@ import {tipsOfUsage} from "@/app/plan/tipsOfUsage";
 export default function Home() {
 
   return (
-    <Base>
+    <>
       <Grid2 container direction={"row"} justifyContent={"center"} columns={{ xs: 8, sm: 8, md: 12, lg:12, xl:12 }}>
         <Grid2 size={8}>
           <Paper elevation={2} style={{padding:10}}>
@@ -29,6 +28,6 @@ export default function Home() {
       </Grid2>
       <CarrouselWithStepper elementsToShow={2} paperContent={tipsOfUsage}/>
       <AccordionRelease/>
-    </Base>
+    </>
     );
 }

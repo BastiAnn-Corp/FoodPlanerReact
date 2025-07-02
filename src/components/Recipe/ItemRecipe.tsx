@@ -1,8 +1,9 @@
 import {ICategory, IRecipe} from "@/util/models";
 import React from "react";
-import {Avatar, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
-import {MoreVert} from "@mui/icons-material";
+import {Avatar, Button, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography} from "@mui/material";
+import {MoreVert, OpenInNewRounded} from "@mui/icons-material";
 import {foodFamilies} from "@/util/constants";
+import {envVars} from "@/util/config";
 
 export function ItemRecipe(
   { recipe , index=0} : {
@@ -26,6 +27,9 @@ export function ItemRecipe(
   const familyData = familyEmoji()
 
   return (<ListItem
+    secondaryAction={
+      <Button href={envVars.baseURL+`/recipes/${recipe.id}`} endIcon={<OpenInNewRounded/>}/>
+    }
   >
     <ListItemAvatar>
       <Avatar

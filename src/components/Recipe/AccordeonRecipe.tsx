@@ -14,13 +14,15 @@ import {
 import {ItemRecipe} from "@/components/Recipe/ItemRecipe";
 import {ItemRecipeIngredient} from "@/components/Recipe/Ingredients/ItemRecipeIngredient";
 import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
-import {EditRounded, KeyboardArrowDownRounded, ModeEditRounded} from "@mui/icons-material";
+import {EditRounded, KeyboardArrowDownRounded, ModeEditRounded, OpenInNewRounded} from "@mui/icons-material";
 import {DeleteButton} from "@/components/Common/DeleteButton";
 import {deleteRecipe} from "@/lib/firebase/recipes";
 import {useEffect, useState} from "react";
 import {onAuthStateChanged} from "@firebase/auth";
 import {authApp} from "@/lib/firebase/firebase-config";
 import {envVars} from "@/util/config";
+import {PortionsCard} from "@/components/Recipe/PortionsCard";
+import {AuthorCard} from "@/components/Recipe/AuthorCard";
 
 interface AccordionRecipeProps {
   refreshAction: ()=>void
@@ -57,16 +59,10 @@ export function AccordionRecipe({recipe, index, refreshAction}: AccordionRecipeP
     </AccordionSummary>
     <AccordionDetails id={`accordion-recipe-details-${index}`}>
       <Grid2 container spacing={2} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} justifyContent={"center"}>
-        <Grid2 size={4}>
-          <ButtonGroup variant={"contained"} size={"medium"}>
-            <Button color={'inherit'} disabled size={"small"}>Esta receta rinde</Button>
-            <Button >{recipe.portions} porciones</Button>
-          </ButtonGroup>
+        <Grid2 size={2}>
+          <PortionsCard type={"chip"} portions={recipe.portions} color={"primary"} />
         </Grid2>
-        <Grid2 size={4}><ButtonGroup variant={"contained"} size={"medium"}>
-          <Button color={"secondary"}>{recipe.creator || 'BastiAnn'} </Button>
-          <Button color={'inherit'} disabled size={"small"}>publicó esta receta</Button>
-        </ButtonGroup></Grid2>
+        <Grid2 size={2}><AuthorCard type={"chip"} creatorName={recipe.creator} color={"secondary"}/></Grid2>
         <Grid2 size={12}>
           <Typography>{recipe.notes || ''}</Typography>
         </Grid2>
@@ -88,30 +84,5 @@ export function AccordionRecipe({recipe, index, refreshAction}: AccordionRecipeP
         </Grid2>
       </Grid2>
     </AccordionDetails>
-    <AccordionActions disableSpacing>
-      {userUUID === "" ? <></> :
-      <Grid2 container direction={"row"} spacing={1} justifyContent={"space-between"} >
-        <Grid2>
-          <Button
-            href={envVars.baseURL+`/recipes/${recipe.id}`}
-            variant={"contained"}
-            startIcon={<EditRounded/>}
-          >Editar</Button>
-        </Grid2>
-        <Grid2 size={"grow"}>
-          <DeleteButton
-            variant={"contained"}
-            disabled={userUUID === ""}
-            deleteAction={()=> {deleteAction()}}
-            refresh={()=>{refreshAction()}}
-          />
-          <Snackbar open={errorMessage !== ''}
-                    autoHideDuration={6000}
-                    onClose={()=>{setErrorMessage('')}}
-                    message={errorMessage}
-          />
-        </Grid2>
-      </Grid2> }
-    </AccordionActions>
   </Accordion>
 }

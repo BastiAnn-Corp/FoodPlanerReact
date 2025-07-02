@@ -7,7 +7,9 @@ import {Delete} from "@mui/icons-material";
 interface ItemRecipeIngredientProps {
   ingredient: IRecipeIngredient,
   index:number;
+  editing?: boolean;
   deleteIngredient?: (ingredient: IRecipeIngredient) => void,
+  editIngredient?: (ingredient: IRecipeIngredient) => void,
 }
 export function ItemRecipeIngredient(
   { ingredient, deleteIngredient, index } : ItemRecipeIngredientProps
@@ -16,6 +18,10 @@ export function ItemRecipeIngredient(
   const primaryText = () => {
     const {ingredient: ing, quantity, quantity_unit: unit} = ingredient
     return `${ing.name} (${quantity} ${unit})`
+  }
+
+  const renderEditable = () => {
+
   }
 
   return (<ListItem
