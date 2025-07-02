@@ -25,7 +25,7 @@ export function RecipeTitleAndTagsCard(props: RecipeTitleAndTagsCardProps){
       <Typography variant="body2"><br/>
         <FamilyChip family={family} iconOnly={false}/>
         {seasons.map((s,i)=>{
-          return <SeasonChip season={s} type={"chip"} style={{marginLeft:5}}/>
+          return <SeasonChip key={`${props.key}-${i}`} season={s} type={"chip"} style={{marginLeft:5}}/>
         })}
       </Typography>
     </CardContent>
