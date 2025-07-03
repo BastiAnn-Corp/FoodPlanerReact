@@ -1,7 +1,6 @@
 
-import {getRecipeById} from "@/lib/firebase/recipes";
+import {getRecipeById, getRecipes} from "@/lib/firebase/recipes";
 import {
-  Divider,
   Grid2,
   List,
   Typography
@@ -12,6 +11,14 @@ import {ItemRecipeIngredient} from "@/components/Recipe/Steps/ItemRecipeIngredie
 import {AuthorCard} from "@/components/Recipe/AuthorCard";
 import {PortionsCard} from "@/components/Recipe/PortionsCard";
 import {RecipeTitleAndTagsCard} from "@/components/Recipe/RecipeTitleAndTagsCard";
+
+export async function generateStaticParams() {
+  const recipes = await getRecipes({});
+  return recipes.map((recipe) => ({
+    slug: recipe.id,
+  }));
+}
+
 export default async function RecipeDetailPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
