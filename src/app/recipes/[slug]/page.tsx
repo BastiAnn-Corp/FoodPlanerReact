@@ -11,6 +11,7 @@ import {ItemRecipeIngredient} from "@/components/Recipe/Steps/ItemRecipeIngredie
 import {AuthorCard} from "@/components/Recipe/AuthorCard";
 import {PortionsCard} from "@/components/Recipe/PortionsCard";
 import {RecipeTitleAndTagsCard} from "@/components/Recipe/RecipeTitleAndTagsCard";
+import { ListOfIngredients } from "@/components/Recipe/Ingredients/ListOfIngredients";
 
 export async function generateStaticParams() {
   const recipes = await getRecipes({});
@@ -46,11 +47,7 @@ export default async function RecipeDetailPage(
       </Grid2>
       <Grid2 size={6}>
         <Typography variant={"h6"} color={"primary"}>Ingredientes: </Typography>
-        <List>
-          {recipe.ingredients_list.map((ingredient,i)=>{
-            return <ItemRecipeIngredient ingredient={ingredient} key={`ingredient-${i}`}/>
-          })}
-        </List>
+        <ListOfIngredients ingredients={recipe.ingredients_list}/>
       </Grid2>
       <Grid2 size={6}>
         <List>
