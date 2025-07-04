@@ -231,6 +231,7 @@ export const measuerementUnits: ICategory[] = [
   }
 ]
 
+export const creatorEmails = ['andrea.benavidesj@gmail.com']
 export const menuDays: ICategory[] = [
   {
     id: 'lunes',

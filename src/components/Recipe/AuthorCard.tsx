@@ -1,20 +1,20 @@
-import {Card, CardContent, CardProps, Chip, ChipProps, Typography} from "@mui/material";
-import {BookmarkAddedRounded, EditRounded} from "@mui/icons-material";
+import {Button, Card, CardContent, CardProps, Chip, Typography} from "@mui/material";
+import {EditRounded} from "@mui/icons-material";
 import React from "react";
 
-interface AuthorCardProps extends CardProps{
+interface AuthorCardProps extends CardProps {
   type: 'card' | 'chip'
   creatorName: string | undefined;
-  color?: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  color?: "inherit" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
 }
 
-export function AuthorCard(props: AuthorCardProps){
+export function AuthorCard(props: AuthorCardProps) {
   const {
     type,
     creatorName,
   } = props
 
-  function renderCardContent(){
+  function renderCardContent() {
     return <Card {...props}>
       <CardContent>
         <Typography align={"center"}>
@@ -29,16 +29,16 @@ export function AuthorCard(props: AuthorCardProps){
     </Card>
   }
 
-  function renderChipContent(){
-    return <Chip
-      label={creatorName || 'BastiAnn'}
-      variant={"outlined"}
-      icon={<EditRounded style={{marginLeft:8}}/>}
+  function renderChipContent() {
+    return <Button variant={"outlined"}
+      startIcon={<EditRounded/>}
+      style={{borderRadius: 18}}
+                   size={"small"}
       color={props.color}
-    />
+    >{creatorName ? creatorName : 'BastiAnn'}</Button>
   }
 
-  switch(type){
+  switch (type) {
     case 'chip':
       return renderChipContent()
     case "card":

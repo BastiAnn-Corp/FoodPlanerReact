@@ -8,12 +8,13 @@ import {
   getDoc,
   orderBy,
   query,
-  Query,
+  Query, updateDoc,
   where
 } from "@firebase/firestore";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
 import {firestoreDB} from "@/lib/firebase/firebase-config";
 import {TFoodFamily, TSeasons} from "@/util/constants";
+import {error} from "next/dist/build/output/log";
 
 const collName = 'recipe'
 const converter : FirebaseFirestore.FirestoreDataConverter<IRecipe> =  {
@@ -136,3 +137,32 @@ export async function deleteRecipe(documentId:string): Promise<string> {
   }
 }
 
+export async function updateRecipe(recipe:IRecipe): Promise<IRecipe | undefined> {
+  try {
+    const docRef = doc(firestoreDB, collName, recipe.id!);
+    const result = await updateDoc(docRef, recipe)
+    return getRecipeById(recipe.id!)
+  } catch (error) {
+    const err = error as FirestoreError;
+    console.error(`Error: ${err.name}: ${err.message}`);
+    return undefined
+  }
+}
+
+export async function updateRecipeIngredients(docId: string, ingredients:IRecipeIngredient[]): Promise<IRecipe | undefined> {
+  try {
+    console.debug(`Updating recipe ${docId}:`, ingredients)
+    const docRef = doc(firestoreDB, collName, docId);
+    await updateDoc(docRef, {ingredients_list: ingredients}).then((res)=>{
+      console.debug('Receta actualizada', res)
+    }).catch((e)=>{
+      console.error(`Error: ${e.name}: ${e.message}`);
+      return undefined
+    })
+    return getRecipeById(docId)
+  } catch (error) {
+    const err = error as FirestoreError;
+    console.error(`Error: ${err.name}: ${err.message}`);
+    return undefined
+  }
+}

@@ -59,10 +59,9 @@ export function AccordionRecipe({recipe, index, refreshAction}: AccordionRecipeP
     </AccordionSummary>
     <AccordionDetails id={`accordion-recipe-details-${index}`}>
       <Grid2 container spacing={2} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} justifyContent={"center"}>
-        <Grid2 size={2}>
-          <PortionsCard type={"chip"} portions={recipe.portions} color={"primary"} />
-        </Grid2>
-        <Grid2 size={2}><AuthorCard type={"chip"} creatorName={recipe.creator} color={"secondary"}/></Grid2>
+        <Grid2 size={12} justifyItems={"center"}>
+          <PortionsCard type={"chip"} portions={recipe.portions} color={"primary"} />{" "}
+          <AuthorCard type={"chip"} creatorName={recipe.creator} color={"secondary"}/></Grid2>
         <Grid2 size={12}>
           <Typography>{recipe.notes || ''}</Typography>
         </Grid2>
