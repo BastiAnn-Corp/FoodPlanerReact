@@ -1,5 +1,5 @@
 import {DocumentData} from "@firebase/firestore";
-import {TAisle, TFoodFamily, TPotProgram, TSeasons} from "@/util/constants";
+import {TAisle, TDaysMenu, TFoodFamily, TPotProgram, TRecipeSection, TSeasons} from "@/util/constants";
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
   ? Acc[number]
@@ -58,22 +58,23 @@ export interface IRecipe extends DocumentData{
   editors?: string[];
 }
 
+export interface IMenuRecipe {
+  name: string;
+  id: string;
+  family: TFoodFamily;
+  portions: number;
+  days: TDaysMenu[];
+  section?: TRecipeSection;
+}
 export interface IMenu extends DocumentData {
   id?: string;
-  number: number;
   persons: number;
   seasons: TSeasons[];
   creator: string;
-  description: string;
-  days: {
-    monday: Array<IRecipe | IIngredient>;
-    tuesday:Array<IRecipe | IIngredient>;
-    wednesday: Array<IRecipe | IIngredient>;
-    thursday: Array<IRecipe | IIngredient>;
-    friday: Array<IRecipe | IIngredient>;
-    saturday: Array<IRecipe | IIngredient>;
-    sunday: Array<IRecipe | IIngredient>;
-  }
+  editors: string[];
+  notes: string;
+  public: boolean;
+  recipes: IMenuRecipe[]
 }
 
 export interface IShoppingCart extends DocumentData{

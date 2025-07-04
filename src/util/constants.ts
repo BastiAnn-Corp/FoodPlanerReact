@@ -9,6 +9,8 @@ export type TAisle = "lacteos-y-quesos"| "frutas-y-verduras" | "carniceria" | "f
   "snack salados" | "botilleria" | "none"
 
 export type TMeasureUnits = "unidad" | "grs" | "ml" | "kg" | "lt" | "cdta" | "cda" | "tz" | "-"
+export type TDaysMenu = "lunes" | "martes" | "miercoles" | "jueves" | "viernes" | "sabado" | "domingo"
+export type TRecipeSection = "colacion" | "desayuno" | "almuerzo" | "once" | "cena"
 
 export const seasons = [
   {
@@ -230,3 +232,35 @@ export const measuerementUnits: ICategory[] = [
 ]
 
 export const creatorEmails = ['andrea.benavidesj@gmail.com']
+export const menuDays: ICategory[] = [
+  {
+    id: 'lunes',
+    name: 'Lunes',
+  },{
+    id: 'martes',
+    name: 'Martes',
+  },{
+    id: 'miercoles',
+    name: 'Miercoles',
+  },{
+    id: 'jueves',
+    name: 'Jueves',
+  },{
+    id: 'viernes',
+    name: 'Viernes',
+  },{
+    id: 'sabado',
+    name: 'Sabado',
+  },{
+    id: 'domingo',
+    name: 'Domingo',
+  },
+]
+
+export const recipeSections: ICategory[] = [
+  {id:'colacion', name:'Colación'},
+  {id:'desayuno', name:'Desayuno'},
+  {id:'almuerzo', name:'Almuerzo'},
+  {id:'once', name:'Once'},
+  {id:'cena', name:'Cena'},
+]
