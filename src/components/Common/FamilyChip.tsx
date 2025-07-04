@@ -3,15 +3,14 @@ import {foodFamilies, TFoodFamily} from "@/util/constants";
 
 interface FamilyChipProp extends ChipProps {
   family: TFoodFamily
-  iconOnly: boolean
+  iconOnly?: boolean
 }
 
 export function FamilyChip (props: FamilyChipProp) {
   const fam = foodFamilies.find((o)=> o.id === props.family)
 
-  return <Chip key={props.id} {...props}
+  return <Chip {...props}
     variant={"filled"}
-
-    label={props.iconOnly ? `${fam?.icon}` : `${fam?.icon} ${fam?.name}`}
+    label={!props.iconOnly ? `${fam?.icon} ${fam?.name}` : `${fam?.icon} ${fam?.name}`}
   />;
 }

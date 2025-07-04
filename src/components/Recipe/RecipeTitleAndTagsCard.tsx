@@ -21,13 +21,11 @@ export function RecipeTitleAndTagsCard(props: RecipeTitleAndTagsCardProps){
       <Typography variant={"h4"} color={props.color} align={"center"}>
         {name}
       </Typography>
-      <Divider/>
-      <Typography variant="body2"><br/>
-        <FamilyChip family={family} iconOnly={false}/>
+      <Divider/><br/>
+        <FamilyChip family={family}/>
         {seasons.map((s,i)=>{
           return <SeasonChip key={`${props.key}-${i}`} season={s} type={"chip"} style={{marginLeft:5}}/>
         })}
-      </Typography>
     </CardContent>
   </Card>
 }

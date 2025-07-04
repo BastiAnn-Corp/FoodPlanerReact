@@ -228,3 +228,5 @@ export const measuerementUnits: ICategory[] = [
     id: "-"
   }
 ]
+
+export const creatorEmails = ['andrea.benavidesj@gmail.com']
