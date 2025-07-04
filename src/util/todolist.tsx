@@ -71,7 +71,7 @@ export const listOfTodos : IToDo[] = [
   },
   {
     title: 'Actualizar ingredientes en receta',
-    done: false,
+    done: true,
     icon: <UpdateRounded/>,
     releaseVersion: 'v0.2.1',
   },

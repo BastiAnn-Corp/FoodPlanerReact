@@ -8,10 +8,8 @@ import {CancelRounded, EditRounded, SaveRounded} from "@mui/icons-material";
 
 interface ListOfIngredientsProps extends ListProps {
 	ingredients: IRecipeIngredient[];
-	editing?: {
-		active: boolean,
-		update: (ingredients: IRecipeIngredient[]) => void,
-	}
+	editing?: boolean;
+	update?: (ingredients: IRecipeIngredient[]) => void;
 }
 
 export function ListOfIngredients(props: ListOfIngredientsProps) {
@@ -54,12 +52,12 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 	}
 	
 	function saveChanges() {
-		props.editing?.update(listOfIngredients)
+		props.update!(listOfIngredients)
 		setActiveEdit(false)
 	}
 	
 	return <Grid2 container spacing={1}>
-		{props.editing?.active === true ? <Grid2 size={12}>{activeEdit ?
+		{props.editing === true ? <Grid2 size={12}>{activeEdit ?
 			<ButtonGroup
 				fullWidth
 				variant={"contained"}
@@ -85,7 +83,7 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 				onClick={() => {
 					setActiveEdit(true)
 				}}
-				disabled={!props.editing?.active}
+				disabled={!props.editing}
 				variant={"contained"}
 				color={"primary"}
 				startIcon={<EditRounded/>}
@@ -93,7 +91,7 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 			>Cambiar ingredientes</Button>
 		}
 		</Grid2> : <></>}
-		{activeEdit && props.editing?.active ?
+		{activeEdit && props.editing ?
 			<Grid2 size={12}>
 				<AddIngredientCard add={handleAddIngredient} listOfIngredients={listOfIngredients}/>
 			</Grid2>
@@ -108,7 +106,7 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 							ingredient={ingredient}
 							key={`${props.key}-ingredient-${i}`}
 							deleteIngredient={activeEdit ? handleDeleteIngredient : undefined}
-							editing={activeEdit && props.editing?.active ? {
+							editing={activeEdit && props.editing ? {
 								active: activeEdit,
 								update: handleUpdateIngredient
 							} : undefined}

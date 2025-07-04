@@ -18,5 +18,5 @@ export default async function Page(
   return !recipe ?
     <Typography color={"error"}>Receta no existe</Typography>
     :
-    <RecipePage recipe={recipe}/>
+    <RecipePage recipe={recipe} id={slug}/>
 }
