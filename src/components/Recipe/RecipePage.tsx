@@ -1,5 +1,5 @@
 "use client"
-import {IRecipe, IRecipeIngredient} from "@/util/models";
+import {IRecipe, IRecipeIngredient, IRecipeStep} from "@/util/models";
 import {Alert, Grid2, List, Typography} from "@mui/material";
 import {RecipeTitleAndTagsCard} from "@/components/Recipe/RecipeTitleAndTagsCard";
 import {PortionsCard} from "@/components/Recipe/PortionsCard";
@@ -9,7 +9,8 @@ import {ItemRecipeStep} from "@/components/Recipe/Steps/ItemRecipeStep";
 import React, {useEffect, useState} from "react";
 import {onAuthStateChanged} from "@firebase/auth";
 import {authApp} from "@/lib/firebase/firebase-config";
-import {updateRecipe, updateRecipeIngredients} from "@/lib/firebase/recipes";
+import {updateRecipe, updateRecipeIngredients, updateRecipeSteps} from "@/lib/firebase/recipes";
+import {ListOfSteps} from "@/components/Recipe/Steps/ListOfSteps";
 
 interface RecipePageProps {
   recipe: IRecipe
@@ -19,6 +20,7 @@ interface RecipePageProps {
 export function RecipePage(props:RecipePageProps){
   const [recipe, setRecipe] = useState<IRecipe>(props.recipe)
   const [ingredientList, setIngredientList] = useState<IRecipeIngredient[]>(props.recipe.ingredients_list);
+  const [stepList, setStepList] = useState<IRecipeStep[]>(props.recipe.steps);
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = React.useState<{severity: 'success' | 'error', message?: string}>({severity: "success"});
   const [userUUID, setUserUUID] = useState<string>("")
@@ -27,38 +29,40 @@ export function RecipePage(props:RecipePageProps){
     onAuthStateChanged(authApp, (user) => {
       if (user !== null) {
         setUserUUID(user.email!)
-        setMessage({severity:"success"})
       } else {
-        setMessage({severity: 'error', message: "Para guardar receta debe conectarse con su cuenta Google, haciendo click en el botón abajo, si ya se conectó refresque la pagina"})
         setUserUUID("")
       }
     });
+    updateRecipeProps(undefined, false)
   },[])
-
-  async function saveRecipe(){
-    const changed : IRecipe = {
-      id: props.id,
-      name: recipe.name,
-      portions: recipe.portions,
-      seasons: recipe.seasons,
-      steps: recipe.steps,
-      ingredients_list: ingredientList,
-      creator: recipe.creator,
-      family: recipe.family,
-      notes: recipe.notes || '',
-      editors: recipe.editors,
-    }
-    const loadedRecipe = await updateRecipe(changed)
-    if(loadedRecipe){
-      setRecipe(loadedRecipe)
-      setMessage({severity: "success", message: "La lista de ingredientes actualizada con éxito!"})
+  
+  function updateRecipeProps(newRecipe: IRecipe | undefined, saving: boolean){
+    if(!newRecipe){
+      setRecipe(recipe)
+      setStepList(recipe.steps);
+      setIngredientList(recipe.ingredients_list);
     } else {
-      setMessage({severity: "error", message: "La lista de ingredientes no pudo ser actualizada, intentalo de nuevo"})
+      setRecipe(newRecipe)
+      setStepList(newRecipe.steps);
+      setIngredientList(newRecipe.ingredients_list);
+      setMessage(saving ? {
+        severity: "error",
+        message: "Los cambios no pudieron ser actualizados, intentalo de nuevo"
+      } :{
+        severity: "success"
+      })
     }
   }
+  
   async function updateIngredients(ingredients: IRecipeIngredient[]) {
     setIngredientList(ingredients)
-    await updateRecipeIngredients(props.id, ingredients)
+    const res = await updateRecipeIngredients(props.id, ingredients)
+    updateRecipeProps(res, true)
+  }
+  async function updateSteps(steps: IRecipeStep[]) {
+    setStepList(steps)
+    const res = await updateRecipeSteps(props.id, steps)
+    updateRecipeProps(res, true)
   }
 
   return <Grid2 container spacing={2} marginTop={2} marginBottom={10} columns={{xs: 6, sm: 6, md: 12, lg: 12, xl: 12}}
@@ -82,20 +86,18 @@ export function RecipePage(props:RecipePageProps){
       </Typography>
     </Grid2>
     <Grid2 size={6}>
-      <Typography variant={"h6"} color={"primary"}>INGREDIENTES </Typography>
       <ListOfIngredients
-        ingredients={recipe.ingredients_list}
+        ingredients={ingredientList}
         editing={userUUID !== ''}
         update={updateIngredients}
       />
     </Grid2>
     <Grid2 size={6}>
-      <Typography variant={"h6"} color={"secondary"}>INSTRUCCIONES </Typography>
-      <List>
-        {recipe.steps.map((recipeStep, i) => {
-          return <ItemRecipeStep step={recipeStep} index={i} key={`step-${i}`}/>
-        })}
-      </List>
+      <ListOfSteps
+        steps={stepList}
+        editing={userUUID !== ''}
+        update={updateSteps}
+      />
     </Grid2>
   </Grid2>
 }

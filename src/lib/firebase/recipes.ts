@@ -159,7 +159,25 @@ export async function updateRecipeIngredients(docId: string, ingredients:IRecipe
       console.error(`Error: ${e.name}: ${e.message}`);
       return undefined
     })
-    return getRecipeById(docId)
+    return await getRecipeById(docId)
+  } catch (error) {
+    const err = error as FirestoreError;
+    console.error(`Error: ${err.name}: ${err.message}`);
+    return undefined
+  }
+}
+
+export async function updateRecipeSteps(docId: string, steps:IRecipeStep[]): Promise<IRecipe | undefined> {
+  try {
+    console.debug(`Updating recipe ${docId}:`, steps)
+    const docRef = doc(firestoreDB, collName, docId);
+    await updateDoc(docRef, {steps: steps}).then((res)=>{
+      console.debug('Receta actualizada', res)
+    }).catch((e)=>{
+      console.error(`Error: ${e.name}: ${e.message}`);
+      return undefined
+    })
+    return await getRecipeById(docId)
   } catch (error) {
     const err = error as FirestoreError;
     console.error(`Error: ${err.name}: ${err.message}`);

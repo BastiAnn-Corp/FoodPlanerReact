@@ -1,7 +1,7 @@
 "use client"
 import {IRecipeIngredient} from "@/util/models";
-import {Button, ButtonGroup, Grid2, List, ListProps} from "@mui/material";
-import {useEffect, useState} from "react";
+import {Button, ButtonGroup, Divider, Grid2, List, ListProps, Typography} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import {ItemRecipeIngredient} from "../Steps/ItemRecipeIngredient";
 import {AddIngredientCard} from "@/components/Recipe/Ingredients/AddIngredientCard";
 import {CancelRounded, EditRounded, SaveRounded} from "@mui/icons-material";
@@ -57,40 +57,44 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 	}
 	
 	return <Grid2 container spacing={1}>
-		{props.editing === true ? <Grid2 size={12}>{activeEdit ?
-			<ButtonGroup
-				fullWidth
-				variant={"contained"}
-				size={"large"}
-			>
-				<Button
-					onClick={() => {
-						saveChanges()
-					}}
-					color={"success"}
-					startIcon={<SaveRounded/>}
-				>Guardar</Button>
-				<Button
-					onClick={() => {
-						reset()
-					}}
-					color={"inherit"}
-					startIcon={<CancelRounded/>}
-				>No guardar</Button>
-			</ButtonGroup>
-			:
-			<Button
-				onClick={() => {
-					setActiveEdit(true)
-				}}
-				disabled={!props.editing}
-				variant={"contained"}
-				color={"primary"}
-				startIcon={<EditRounded/>}
-				fullWidth
-			>Cambiar ingredientes</Button>
-		}
-		</Grid2> : <></>}
+		
+		<Grid2 container direction={"row"} size={12} justifyContent={"space-between"}>
+			<Grid2 size={6}>
+				<Typography variant={"h6"} color={"primary"}>INGREDIENTES</Typography>
+			</Grid2>
+			<Grid2 size={"auto"}>{props.editing === true ? activeEdit ?
+					<ButtonGroup
+						variant={"contained"}
+					>
+						<Button
+							onClick={() => {
+								saveChanges()
+							}}
+							color={"primary"}
+						><SaveRounded/></Button>
+						<Button
+							onClick={() => {
+								reset()
+							}}
+							color={"inherit"}
+						><CancelRounded/></Button>
+					</ButtonGroup>
+					:
+					<Button
+						onClick={() => {
+							setActiveEdit(true)
+						}}
+						disabled={!props.editing}
+						variant={"contained"}
+						color={"primary"}
+						startIcon={<EditRounded/>}
+					>Editar</Button>
+				: <></>}</Grid2>
+			<Grid2 size={12}>
+				<Divider color={"#7cb342"} />
+			</Grid2>
+		</Grid2>
+
 		{activeEdit && props.editing ?
 			<Grid2 size={12}>
 				<AddIngredientCard add={handleAddIngredient} listOfIngredients={listOfIngredients}/>
@@ -106,10 +110,8 @@ export function ListOfIngredients(props: ListOfIngredientsProps) {
 							ingredient={ingredient}
 							key={`${props.key}-ingredient-${i}`}
 							deleteIngredient={activeEdit ? handleDeleteIngredient : undefined}
-							editing={activeEdit && props.editing ? {
-								active: activeEdit,
-								update: handleUpdateIngredient
-							} : undefined}
+							editing={activeEdit && props.editing}
+							update={handleUpdateIngredient}
 						/>
 					})
 				}
