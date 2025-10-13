@@ -1,248 +1,217 @@
 "use client"
-import React from 'react';
-import { 
-  Typography, 
-  Container, 
-  Paper, 
-  Box, 
-  Button, 
-  Grid, 
-  Card, 
-  CardContent,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText
+import React, {useEffect, useState} from 'react';
+import {
+  Typography,
+  Container,
+  Paper,
+  Box,
+  Button,
+  Grid,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import {
   RestaurantMenuRounded,
-  CalendarTodayRounded,
-  ShoppingCartRounded,
-  ShareRounded,
-  PublicRounded,
-  AutoAwesomeRounded
+  AddCircleRounded
 } from '@mui/icons-material';
+import {IMenu} from '@/util/models';
+import {getMenus, deleteMenu} from '@/lib/firebase/menus';
+import {MenuCard} from '@/components/Menu/MenuCard';
+import {MenuFilters} from '@/components/Menu/MenuFilters';
+import {envVars} from '@/util/config';
+import {TSeasons} from '@/util/constants';
 
 export default function MenusPage() {
+  const [menus, setMenus] = useState<IMenu[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(false);
+
+  // Filter states
+  const [searchText, setSearchText] = useState('');
+  const [selectedSeason, setSelectedSeason] = useState('');
+  const [showPublicOnly, setShowPublicOnly] = useState(false);
+
+  // Load menus on mount and refresh
+  useEffect(() => {
+    loadMenus();
+  }, [refresh, showPublicOnly, selectedSeason]);
+
+  async function loadMenus() {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const filters: {season?: TSeasons; publicOnly?: boolean} = {};
+
+      if (selectedSeason) {
+        filters.season = selectedSeason as TSeasons;
+      }
+
+      if (showPublicOnly) {
+        filters.publicOnly = true;
+      }
+
+      const response = await getMenus(filters);
+      setMenus(response);
+      console.debug(`Found ${response.length} menus`);
+    } catch (err) {
+      console.error('Error loading menus:', err);
+      setError('Error al cargar los menús');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  // Client-side filtering for search text
+  function filterBySearch(menu: IMenu): boolean {
+    if (!searchText) return true;
+
+    const searchLower = searchText.toLowerCase();
+    const inNotes = menu.notes?.toLowerCase().includes(searchLower);
+    const inId = menu.id?.toLowerCase().includes(searchLower);
+
+    return inNotes || inId || false;
+  }
+
+  async function handleDelete(menuId: string | undefined) {
+    if (!menuId) return;
+
+    const confirmed = confirm('¿Estás seguro de que quieres eliminar este menú?');
+    if (!confirmed) return;
+
+    try {
+      const result = await deleteMenu(menuId);
+      console.log(result);
+      setRefresh(!refresh); // Trigger reload
+    } catch (err) {
+      console.error('Error deleting menu:', err);
+      alert('Error al eliminar el menú');
+    }
+  }
+
+  const filteredMenus = menus.filter(filterBySearch);
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 2, mb: 4 }}>
         {/* Header Section */}
-        <Paper elevation={3} sx={{ p: 4, mb: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-          <Box display="flex" alignItems="center" mb={2}>
-            <RestaurantMenuRounded sx={{ fontSize: 40, mr: 2 }} />
-            <Typography variant="h3" component="h1" fontWeight="bold">
-              Mis Menús
-            </Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            mb: 3,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white'
+          }}
+        >
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Box display="flex" alignItems="center">
+              <RestaurantMenuRounded sx={{ fontSize: 40, mr: 2 }} />
+              <Box>
+                <Typography variant="h3" component="h1" fontWeight="bold">
+                  Mis Menús
+                </Typography>
+                <Typography variant="h6" sx={{ opacity: 0.9 }}>
+                  Planifica tus comidas semanales
+                </Typography>
+              </Box>
+            </Box>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<AddCircleRounded />}
+              href={`${envVars.baseURL}/menus/create`}
+              sx={{
+                bgcolor: 'white',
+                color: '#667eea',
+                '&:hover': {
+                  bgcolor: 'rgba(255,255,255,0.9)'
+                }
+              }}
+            >
+              Crear Menú
+            </Button>
           </Box>
-          <Typography variant="h6" sx={{ opacity: 0.9 }}>
-            Planifica tus comidas semanales asignando recetas a días y horarios
-          </Typography>
         </Paper>
 
-        {/* Under Construction Notice */}
-        <Paper elevation={2} sx={{ p: 3, mb: 3, borderLeft: '4px solid #ff9800' }}>
-          <Typography variant="h5" gutterBottom color="warning.main" fontWeight="bold">
-            🚧 Funcionalidad en Desarrollo
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Esta sección está siendo desarrollada como parte de la versión 1.0.0. 
-            ¡Muy pronto podrás crear y gestionar tus menús semanales!
-          </Typography>
-        </Paper>
-
-        {/* Feature Preview Grid */}
         <Grid container spacing={3}>
-          {/* Menu Planning Feature */}
-          <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <CalendarTodayRounded color="primary" sx={{ mr: 1 }} />
-                  <Typography variant="h6" color="primary">
-                    Planificación Semanal
-                  </Typography>
-                </Box>
-                <List dense>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Calendario semanal" 
-                      secondary="Organiza comidas por día de la semana"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Asignación de recetas" 
-                      secondary="Desayuno, Almuerzo, Cena para cada día"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Cálculo de porciones" 
-                      secondary="Ajusta automáticamente según personas"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
+          {/* Filters Sidebar */}
+          <Grid item xs={12} md={3}>
+            <MenuFilters
+              searchText={searchText}
+              onSearchChange={setSearchText}
+              selectedSeason={selectedSeason}
+              onSeasonChange={setSelectedSeason}
+              showPublicOnly={showPublicOnly}
+              onPublicToggle={setShowPublicOnly}
+            />
           </Grid>
 
-          {/* Menu Management Feature */}
-          <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <RestaurantMenuRounded color="secondary" sx={{ mr: 1 }} />
-                  <Typography variant="h6" color="secondary">
-                    Gestión de Menús
-                  </Typography>
-                </Box>
-                <List dense>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Múltiples menús" 
-                      secondary="Crea diferentes planificaciones"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Filtros por estación" 
-                      secondary="Menús de verano, invierno, etc."
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Notas personalizadas" 
-                      secondary="Agrega comentarios a tus menús"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+          {/* Menu Cards Grid */}
+          <Grid item xs={12} md={9}>
+            {/* Loading State */}
+            {isLoading && (
+              <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
+                <CircularProgress />
+              </Box>
+            )}
 
-          {/* Sharing Feature */}
-          <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <ShareRounded color="success" sx={{ mr: 1 }} />
-                  <Typography variant="h6" color="success.main">
-                    Compartir Menús
-                  </Typography>
-                </Box>
-                <List dense>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Comparte con familia" 
-                      secondary="Invita colaboradores a editar"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Enlaces de solo lectura" 
-                      secondary="Comparte menús sin permisos de edición"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Control de privacidad" 
-                      secondary="Menús públicos o privados"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+            {/* Error State */}
+            {error && !isLoading && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
 
-          {/* Public Menus Feature */}
-          <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <PublicRounded color="info" sx={{ mr: 1 }} />
-                  <Typography variant="h6" color="info.main">
-                    Menús Públicos
-                  </Typography>
-                </Box>
-                <List dense>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Explora menús de la comunidad" 
-                      secondary="Descubre nuevas ideas de planificación"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Usa como plantilla" 
-                      secondary="Copia menús públicos y personalízalos"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AutoAwesomeRounded fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Comparte tus creaciones" 
-                      secondary="Haz públicos tus mejores menús"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
+            {/* Empty State */}
+            {!isLoading && !error && filteredMenus.length === 0 && (
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 6,
+                  textAlign: 'center',
+                  bgcolor: 'background.default'
+                }}
+              >
+                <RestaurantMenuRounded sx={{ fontSize: 64, color: 'text.disabled', mb: 2 }} />
+                <Typography variant="h6" color="text.secondary" gutterBottom>
+                  No hay menús disponibles
+                </Typography>
+                <Typography variant="body2" color="text.disabled" mb={3}>
+                  {menus.length === 0
+                    ? 'Crea tu primer menú para comenzar a planificar tus comidas'
+                    : 'No se encontraron menús con los filtros seleccionados'}
+                </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<AddCircleRounded />}
+                  href={`${envVars.baseURL}/menus/create`}
+                >
+                  Crear Primer Menú
+                </Button>
+              </Paper>
+            )}
+
+            {/* Menu Cards */}
+            {!isLoading && !error && filteredMenus.length > 0 && (
+              <>
+                <Typography variant="body2" color="text.secondary" mb={2}>
+                  Mostrando {filteredMenus.length} menú{filteredMenus.length !== 1 ? 's' : ''}
+                </Typography>
+                <Grid container spacing={2}>
+                  {filteredMenus.map((menu, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={menu.id || index}>
+                      <MenuCard
+                        menu={menu}
+                        onDelete={() => handleDelete(menu.id)}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </>
+            )}
           </Grid>
         </Grid>
-
-        {/* Call to Action */}
-        <Paper elevation={2} sx={{ p: 3, mt: 4, textAlign: 'center', backgroundColor: '#f5f5f5' }}>
-          <Typography variant="h6" gutterBottom>
-            ¿Quieres ser notificado cuando esté listo?
-          </Typography>
-          <Typography variant="body2" color="text.secondary" mb={2}>
-            Mientras tanto, puedes seguir creando recetas increíbles que podrás usar en tus futuros menús.
-          </Typography>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            href="/recipes"
-            startIcon={<RestaurantMenuRounded />}
-          >
-            Explorar Recetas
-          </Button>
-        </Paper>
       </Box>
     </Container>
   );
