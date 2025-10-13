@@ -33,7 +33,7 @@ const pages = [
     name: "Menús",
     route: "/menus",
     icon: <RestaurantMenuRounded/>,
-    enabled: false,
+    enabled: true,
     inBottomBar: true,
   },{
     name: "Ingredientes",
