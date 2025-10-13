@@ -68,6 +68,7 @@ export interface IMenuRecipe {
 }
 export interface IMenu extends DocumentData {
   id?: string;
+  name?: string;
   persons: number;
   seasons: TSeasons[];
   creator: string;

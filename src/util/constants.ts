@@ -258,8 +258,8 @@ export const menuDays: ICategory[] = [
 ]
 
 export const recipeSections: ICategory[] = [
-  {id:'colacion', name:'Colación'},
   {id:'desayuno', name:'Desayuno'},
+  {id:'colacion', name:'Colación'},
   {id:'almuerzo', name:'Almuerzo'},
   {id:'once', name:'Once'},
   {id:'cena', name:'Cena'},

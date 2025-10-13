@@ -97,6 +97,7 @@ export async function getMenuById(id: string): Promise<IMenu | undefined> {
 }
 
 export interface ICreateMenuInput {
+  name?: string;
   persons: number;
   seasons: TSeasons[];
   creator: string;
@@ -133,6 +134,7 @@ export async function createMenu(args: ICreateMenuInput): Promise<createDocOutpu
     }
 
     const data: IMenu = {
+      name: args.name || '',
       persons: args.persons,
       seasons: args.seasons,
       creator: args.creator,

@@ -30,6 +30,12 @@ export default function CreateMenuPage() {
   const router = useRouter();
 
   // Form state
+  const [menuName, setMenuName] = useState<string>(() => {
+    // Generate default name with current date
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return `Menú ${dateStr}`;
+  });
   const [persons, setPersons] = useState<number>(2);
   const [selectedSeasons, setSelectedSeasons] = useState<TSeasons[]>([]);
   const [notes, setNotes] = useState('');
@@ -59,22 +65,35 @@ export default function CreateMenuPage() {
   }
 
   function handleRecipeSelect(recipe: IRecipe, selectedDays: TDaysMenu[], section: TRecipeSection) {
-    // Remove existing recipes for the same days and section
-    const filtered = menuRecipes.filter(r =>
-      !(selectedDays.some(day => r.days?.includes(day)) && r.section === section)
-    );
+    // Check if this exact recipe already exists in the menu
+    const existingRecipeIndex = menuRecipes.findIndex(r => r.id === recipe.id && r.section === section);
 
-    // Add new recipe
-    const newMenuRecipe: IMenuRecipe = {
-      name: recipe.name,
-      id: recipe.id!,
-      family: recipe.family,
-      portions: recipe.portions,
-      days: selectedDays,
-      section: section
-    };
+    if (existingRecipeIndex !== -1) {
+      // Recipe already exists - merge days
+      const existingRecipe = menuRecipes[existingRecipeIndex];
+      const mergedDays = Array.from(new Set([...(existingRecipe.days || []), ...selectedDays]));
 
-    setMenuRecipes([...filtered, newMenuRecipe]);
+      const updatedRecipes = [...menuRecipes];
+      updatedRecipes[existingRecipeIndex] = {
+        ...existingRecipe,
+        days: mergedDays
+      };
+
+      setMenuRecipes(updatedRecipes);
+    } else {
+      // New recipe - add it
+      const newMenuRecipe: IMenuRecipe = {
+        name: recipe.name,
+        id: recipe.id!,
+        family: recipe.family,
+        portions: recipe.portions,
+        days: selectedDays,
+        section: section
+      };
+
+      setMenuRecipes([...menuRecipes, newMenuRecipe]);
+    }
+
     setSelectorOpen(false);
   }
 
@@ -109,6 +128,7 @@ export default function CreateMenuPage() {
       const creator = 'andrea.benavidesj@gmail.com';
 
       const result = await createMenu({
+        name: menuName,
         persons,
         seasons: selectedSeasons,
         creator,
@@ -175,6 +195,16 @@ export default function CreateMenuPage() {
           </Typography>
 
           <Box display="flex" flexDirection="column" gap={2}>
+            {/* Menu Name */}
+            <TextField
+              label="Nombre del menú"
+              value={menuName}
+              onChange={(e) => setMenuName(e.target.value)}
+              size="small"
+              helperText="Puedes editar el nombre generado automáticamente"
+              fullWidth
+            />
+
             {/* Persons */}
             <TextField
               label="Número de personas"
@@ -253,7 +283,7 @@ export default function CreateMenuPage() {
         />
 
         {/* Action Buttons */}
-        <Box display="flex" justifyContent="flex-end" gap={2} mt={3}>
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={3} pb={10}>
           <Button
             variant="outlined"
             startIcon={<CancelRounded />}
