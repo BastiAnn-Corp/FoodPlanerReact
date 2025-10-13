@@ -60,7 +60,7 @@ export function MenuCard({menu, onEdit, onDelete, onView}: MenuCardProps) {
         {/* Header with privacy indicator */}
         <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
           <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', flexGrow: 1 }}>
-            {menu.id || 'Menú'}
+            {menu.name || menu.id || 'Menú'}
           </Typography>
           <Tooltip title={menu.public ? 'Menú público' : 'Menú privado'}>
             {menu.public ? (

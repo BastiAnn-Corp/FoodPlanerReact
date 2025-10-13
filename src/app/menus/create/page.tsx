@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Container,
   Paper,
@@ -25,6 +25,8 @@ import {createMenu} from '@/lib/firebase/menus';
 import {WeeklyCalendar} from '@/components/Menu/WeeklyCalendar';
 import {RecipeSelector} from '@/components/Menu/RecipeSelector';
 import {envVars} from '@/util/config';
+import {onAuthStateChanged} from '@firebase/auth';
+import {authApp} from '@/lib/firebase/firebase-config';
 
 export default function CreateMenuPage() {
   const router = useRouter();
@@ -48,8 +50,25 @@ export default function CreateMenuPage() {
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [currentSlot, setCurrentSlot] = useState<{day: TDaysMenu; section: TRecipeSection} | null>(null);
 
+  // Auth state
+  const [creatorName, setCreatorName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+
   // Validation
-  const isValid = persons > 0 && selectedSeasons.length > 0;
+  const isValid = persons > 0 && selectedSeasons.length > 0 && userEmail !== '';
+
+  useEffect(() => {
+    onAuthStateChanged(authApp, (user) => {
+      if (user !== null) {
+        setCreatorName(user.displayName || user.email || 'Usuario');
+        setUserEmail(user.email || '');
+      } else {
+        setError('Para crear un menú debes iniciar sesión con tu cuenta Google');
+        setCreatorName("");
+        setUserEmail("");
+      }
+    });
+  }, []);
 
   function handleSeasonToggle(season: TSeasons) {
     setSelectedSeasons(prev =>
@@ -124,15 +143,12 @@ export default function CreateMenuPage() {
     setError(null);
 
     try {
-      // TODO: Get actual user email from auth
-      const creator = 'andrea.benavidesj@gmail.com';
-
       const result = await createMenu({
         name: menuName,
         persons,
         seasons: selectedSeasons,
-        creator,
-        editors: [],
+        creator: creatorName,  // Display name
+        editors: [userEmail],  // Email in editors array
         notes,
         public: isPublic,
         recipes: menuRecipes

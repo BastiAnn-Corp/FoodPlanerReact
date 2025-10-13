@@ -71,8 +71,8 @@ export interface IMenu extends DocumentData {
   name?: string;
   persons: number;
   seasons: TSeasons[];
-  creator: string;
-  editors: string[];
+  creator?: string;  // Display name (like "Andrea Benavides")
+  editors: string[];  // Array of emails
   notes: string;
   public: boolean;
   recipes: IMenuRecipe[]

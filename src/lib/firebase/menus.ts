@@ -100,8 +100,8 @@ export interface ICreateMenuInput {
   name?: string;
   persons: number;
   seasons: TSeasons[];
-  creator: string;
-  editors: string[];
+  creator?: string;  // Display name
+  editors: string[];  // Array of emails
   notes: string;
   public: boolean;
   recipes: IMenuRecipe[];
@@ -114,7 +114,7 @@ export function validateMenuCreation(args: ICreateMenuInput): boolean {
   if (
     args.persons <= 0 ||
     args.seasons.length === 0 ||
-    !args.creator
+    args.editors.length === 0  // At least one editor (creator's email)
   ) {
     return false
   }
@@ -129,7 +129,7 @@ export async function createMenu(args: ICreateMenuInput): Promise<createDocOutpu
     if (!validateMenuCreation(args)) {
       return {
         data: null,
-        error: 'Invalid menu data: persons must be > 0, at least one season required, and creator must be set'
+        error: 'Invalid menu data: persons must be > 0, at least one season required, and at least one editor required'
       }
     }
 
@@ -137,7 +137,7 @@ export async function createMenu(args: ICreateMenuInput): Promise<createDocOutpu
       name: args.name || '',
       persons: args.persons,
       seasons: args.seasons,
-      creator: args.creator,
+      creator: args.creator || '',
       editors: args.editors || [],
       notes: args.notes || '',
       public: args.public || false,
