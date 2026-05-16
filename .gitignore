@@ -25,6 +25,7 @@
 .DS_Store
 *.pem
 */firebase-config.ts
+.claude/settings.local.json
 
 # debug
 npm-debug.log*
