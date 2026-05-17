@@ -1,6 +1,6 @@
 "use client"
 import { Box, Button, Tooltip } from "@mui/material";
-import { ContentCopyRounded, IosShareRounded, SortRounded } from "@mui/icons-material";
+import { ContentCopyRounded, IosShareRounded, SaveRounded, SortRounded } from "@mui/icons-material";
 import { SortMode } from "@/components/Shopping/types";
 
 interface ActionBarProps {
@@ -9,10 +9,12 @@ interface ActionBarProps {
   canShare: boolean;
   onShare: () => void;
   onCopy: () => void;
+  canSave?: boolean;
+  onSave?: () => void;
   sticky?: boolean;
 }
 
-export function ActionBar({ sortMode, onSortChange, canShare, onShare, onCopy, sticky = true }: ActionBarProps) {
+export function ActionBar({ sortMode, onSortChange, canShare, onShare, onCopy, canSave, onSave, sticky = true }: ActionBarProps) {
   return (
     <Box
       sx={{
@@ -46,7 +48,18 @@ export function ActionBar({ sortMode, onSortChange, canShare, onShare, onCopy, s
         {sortMode === 'aisle' ? 'Por pasillo' : 'Alfabético'}
       </Button>
 
-      <Box sx={{ ml: 'auto', display: 'flex', gap: 0.25 }}>
+      <Box sx={{ ml: 'auto', display: 'flex', gap: 0.25, alignItems: 'center' }}>
+        {canSave && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<SaveRounded sx={{ fontSize: 16 }} />}
+            onClick={onSave}
+            sx={{ textTransform: 'none', fontSize: '0.75rem', fontWeight: 600 }}
+          >
+            Guardar
+          </Button>
+        )}
         <Button
           size="small"
           startIcon={<ContentCopyRounded sx={{ fontSize: 16 }} />}
@@ -73,6 +86,7 @@ export function ActionBar({ sortMode, onSortChange, canShare, onShare, onCopy, s
           </span>
         </Tooltip>
       </Box>
+
     </Box>
   );
 }

@@ -1,16 +1,16 @@
 "use client"
 import { Box, Divider, Dialog, DialogTitle, DialogContent, IconButton, Typography } from "@mui/material";
 import { CloseRounded } from "@mui/icons-material";
-import { ShoppingRecipe } from "@/components/Shopping/types";
-import { STUB_RECIPE_DETAILS } from "@/components/Shopping/stubs";
+import { RecipeIngredientDetail, ShoppingRecipe } from "@/components/Shopping/types";
 
 interface RecipeIngModalProps {
   recipe: ShoppingRecipe;
+  ingredientDetails: RecipeIngredientDetail[];
   onClose: () => void;
 }
 
-export function RecipeIngModal({ recipe, onClose }: RecipeIngModalProps) {
-  const ingredients = STUB_RECIPE_DETAILS[recipe.id] ?? [];
+export function RecipeIngModal({ recipe, ingredientDetails, onClose }: RecipeIngModalProps) {
+  const ingredients = ingredientDetails;
 
   return (
     <Dialog

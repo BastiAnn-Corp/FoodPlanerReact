@@ -2,15 +2,16 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography } from "@mui/material";
 import { AddRounded, AssignmentRounded, CheckRounded, CloseRounded } from "@mui/icons-material";
 import { SavedList } from "@/components/Shopping/types";
-import { STUB_SAVED_LISTS } from "@/components/Shopping/stubs";
 
 interface ListSwitcherModalProps {
+  lists: SavedList[];
   currentId: string;
   onSelect: (list: SavedList) => void;
+  onNewList?: () => void;
   onClose: () => void;
 }
 
-export function ListSwitcherModal({ currentId, onSelect, onClose }: ListSwitcherModalProps) {
+export function ListSwitcherModal({ lists, currentId, onSelect, onNewList, onClose }: ListSwitcherModalProps) {
   return (
     <Dialog
       open
@@ -37,7 +38,7 @@ export function ListSwitcherModal({ currentId, onSelect, onClose }: ListSwitcher
       </DialogTitle>
 
       <DialogContent sx={{ pt: 0 }}>
-        {STUB_SAVED_LISTS.map((list, i) => (
+        {lists.map((list, i) => (
           <Box key={list.id}>
             <Box
               onClick={() => { onSelect(list); onClose(); }}
@@ -57,11 +58,11 @@ export function ListSwitcherModal({ currentId, onSelect, onClose }: ListSwitcher
               <AssignmentRounded sx={{ color: 'primary.main', fontSize: 22, flexShrink: 0 }} />
               <Box sx={{ flex: 1 }}>
                 <Typography variant="body2" fontWeight={500}>{list.name}</Typography>
-                <Typography variant="caption" color="text.secondary">{list.itemCount} ingredientes</Typography>
+                <Typography variant="caption" color="text.secondary">{list.itemCount} recetas</Typography>
               </Box>
               {list.id === currentId && <CheckRounded sx={{ color: 'primary.main' }} />}
             </Box>
-            {i < STUB_SAVED_LISTS.length - 1 && <Divider />}
+            {i < lists.length - 1 && <Divider />}
           </Box>
         ))}
 
@@ -69,6 +70,7 @@ export function ListSwitcherModal({ currentId, onSelect, onClose }: ListSwitcher
           fullWidth
           variant="outlined"
           startIcon={<AddRounded />}
+          onClick={() => { onNewList?.(); onClose(); }}
           sx={{
             mt: 1.75,
             borderStyle: 'dashed',

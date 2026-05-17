@@ -5,31 +5,28 @@ import { useRef, useState } from "react";
 import { PillButton } from "@/components/Shopping/atoms/PillButton";
 import { ListSwitcherModal } from "@/components/Shopping/dialogs/ListSwitcherModal";
 import { SavedList } from "@/components/Shopping/types";
-import { STUB_SAVED_LISTS } from "@/components/Shopping/stubs";
 
 interface ListHeaderProps {
   isLoggedIn: boolean;
   listName: string;
   setListName: (name: string) => void;
+  lists?: SavedList[];
+  currentListId?: string;
+  onSelectList?: (list: SavedList) => void;
+  onNewList?: () => void;
 }
 
-export function ListHeader({ isLoggedIn, listName, setListName }: ListHeaderProps) {
+export function ListHeader({ isLoggedIn, listName, setListName, lists = [], currentListId = '', onSelectList, onNewList }: ListHeaderProps) {
   const [editing, setEditing]       = useState(false);
   const [switcherOpen, setSwitcher] = useState(false);
-  const [currentListId, setListId]  = useState('l1');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const currentList = STUB_SAVED_LISTS.find(l => l.id === currentListId) ?? STUB_SAVED_LISTS[0];
+  const currentList = lists.find(l => l.id === currentListId) ?? lists[0] ?? null;
 
   const startEdit = () => {
     if (!isLoggedIn) return;
     setEditing(true);
     setTimeout(() => inputRef.current?.focus(), 20);
-  };
-
-  const handleSelect = (list: SavedList) => {
-    setListId(list.id);
-    setListName(list.name);
   };
 
   return (
@@ -87,13 +84,13 @@ export function ListHeader({ isLoggedIn, listName, setListName }: ListHeaderProp
             endIcon={<ExpandMoreRounded sx={{ fontSize: 15, color: 'text.secondary' }} />}
             disabled={!isLoggedIn}
           >
-            {currentList.shortName}
+            {currentList?.shortName ?? 'Mi lista'}
           </PillButton>
 
           {isLoggedIn && (
             <Box
               component="button"
-              onClick={() => setSwitcher(true)}
+              onClick={() => { onNewList?.(); }}
               sx={{
                 ml: 'auto',
                 color: 'primary.main',
@@ -122,8 +119,10 @@ export function ListHeader({ isLoggedIn, listName, setListName }: ListHeaderProp
 
       {switcherOpen && (
         <ListSwitcherModal
+          lists={lists}
           currentId={currentListId}
-          onSelect={handleSelect}
+          onSelect={(list) => { onSelectList?.(list); setListName(list.name); }}
+          onNewList={onNewList}
           onClose={() => setSwitcher(false)}
         />
       )}
