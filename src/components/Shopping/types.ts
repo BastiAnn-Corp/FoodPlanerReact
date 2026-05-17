@@ -34,3 +34,6 @@ export interface SavedList {
 }
 
 export type SortMode = 'aisle' | 'alpha';
+
+/** Discriminated page mode — replaces the two boolean constants USER_IS_LOGGED_IN / IS_READONLY. */
+export type PageMode = 'owner' | 'readonly' | 'anonymous';

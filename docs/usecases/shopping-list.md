@@ -104,7 +104,15 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 **GIVEN** a logged user has a list they want to share  
 **WHEN** they tap "Share" and copy the generated link  
-**THEN** a link is generated in the form `https://bastiann-corp.github.io/FoodPlanerReact/shopping?list=<id>&token=<token>` and anyone with that link can open it, see the full ingredient list, and check items off — but cannot add/remove recipes or edit quantities
+**THEN** a link is generated in the form `https://bastiann-corp.github.io/FoodPlanerReact/shopping?token=<shareToken>` and anyone with that link can open it, see the full ingredient list, and check items off — but cannot add/remove recipes or edit quantities
+
+---
+
+## UC-13b — Shared list stays in sync
+
+**GIVEN** a logged user has shared a list and later modifies it (adds/removes recipes, changes portions)  
+**WHEN** they save the list  
+**THEN** the shared view is updated atomically in the same write — any recipient who refreshes their link sees the current state immediately, with no action required from the owner
 
 ---
 
@@ -157,12 +165,54 @@ Tomatoes    300g + 2 units
 
 Production base URL: `https://bastiann-corp.github.io/FoodPlanerReact/`
 
-Share links must be rooted at this URL since the app is hosted on GitHub Pages under a subpath. The share route should follow the pattern:
+Share links must be rooted at this URL since the app is hosted on GitHub Pages under a subpath. The share route follows the pattern:
 
 ```
-https://bastiann-corp.github.io/FoodPlanerReact/shopping?list=<listId>&token=<shareToken>
+https://bastiann-corp.github.io/FoodPlanerReact/shopping?token=<shareToken>
 ```
 
-The `token` serves as an unguessable access key (no authentication required to view). The data layer must validate the token against the list before serving the read-only view.
+The `token` is the only parameter needed — it acts as both the lookup key and the access credential (no authentication required to view). The data layer resolves the list by querying `shared_list_views/{shareToken}` directly.
 
-**Implication for routing**: The Next.js `basePath` is already set to `/FoodPlanerReact` for GitHub Pages deployment. Share links must respect this — never generate bare `/shopping?list=...` URLs for sharing; always use the full production URL or rely on `window.location.origin + basePath`.
+**Implication for routing**: The Next.js `basePath` is already set to `/FoodPlanerReact` for GitHub Pages deployment. Share links must respect this — never generate bare `/shopping?token=...` URLs for sharing; always use the full production URL or rely on `window.location.origin + basePath`.
+
+---
+
+### Shared list — technical considerations
+
+#### Why `shared_list_views/{shareToken}` (token as document ID)?
+
+Firestore security rules cannot inspect query parameters or verify that a client "knows" a value at read time unless that value is part of the document path. Storing the share token as the document ID means a simple `allow read: if true` on the `shared_list_views` collection is safe — only someone who knows the unguessable token can ever retrieve the document. The `shopping_lists` collection remains private (owner-only reads/writes) throughout.
+
+#### Document structure
+
+`shared_list_views/{shareToken}`:
+```
+{
+  listId: string,          // back-reference to the source list
+  ownerName: string,       // display name of the owner
+  listName: string,        // name of the list at time of last save
+  recipes: IShoppingListRecipe[],   // full recipe + ingredient snapshot
+  updatedAt: Timestamp
+}
+```
+
+#### Auto-sync via batch write
+
+When the owner saves their list, a single `writeBatch` atomically updates both:
+- `shopping_lists/{listId}` — the private canonical list
+- `shared_list_views/{shareToken}` — the public snapshot
+
+Any recipient who refreshes the share link immediately sees the current state. No webhook, no polling, no secondary trigger needed.
+
+#### Checked state for recipients
+
+Recipients can check items off while shopping, but that state is held **in-memory only** (React state) on their device — it is never written to Firestore. This keeps security rules simple (no write path for anonymous users on `shared_list_views`) and avoids merge conflicts between multiple recipients checking different items. State is lost on tab close, which is acceptable for a shared grocery session.
+
+#### Edge cases
+
+| Scenario | Behaviour |
+|---|---|
+| Owner deletes a recipe after sharing | Next save overwrites the snapshot; recipients see updated list on refresh |
+| Owner renames the list | Reflected in `shared_list_views.listName` on next save |
+| Owner wants to revoke access | Delete the `shared_list_views/{shareToken}` document; the link 404s immediately |
+| Owner generates a new share link | A new `shareToken` is created; old token document can be deleted or left to expire |

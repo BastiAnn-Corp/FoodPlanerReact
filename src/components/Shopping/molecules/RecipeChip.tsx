@@ -2,16 +2,17 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import { CloseRounded } from "@mui/icons-material";
 import { useState } from "react";
-import { ShoppingRecipe } from "@/components/Shopping/types";
+import { RecipeIngredientDetail, ShoppingRecipe } from "@/components/Shopping/types";
 import { RecipeIngModal } from "@/components/Shopping/dialogs/RecipeIngModal";
 
 interface RecipeChipProps {
   recipe: ShoppingRecipe;
+  ingredientDetails?: RecipeIngredientDetail[];
   onRemove: (id: string) => void;
   onPortionChange: (id: string, delta: number) => void;
 }
 
-export function RecipeChip({ recipe, onRemove, onPortionChange }: RecipeChipProps) {
+export function RecipeChip({ recipe, ingredientDetails = [], onRemove, onPortionChange }: RecipeChipProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -138,7 +139,7 @@ export function RecipeChip({ recipe, onRemove, onPortionChange }: RecipeChipProp
       </Box>
 
       {modalOpen && (
-        <RecipeIngModal recipe={recipe} onClose={() => setModalOpen(false)} />
+        <RecipeIngModal recipe={recipe} ingredientDetails={ingredientDetails} onClose={() => setModalOpen(false)} />
       )}
     </>
   );
