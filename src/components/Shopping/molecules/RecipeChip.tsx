@@ -49,6 +49,10 @@ export function RecipeChip({ recipe, ingredientDetails = [], onRemove, onPortion
             p: 0,
             fontFamily: 'inherit',
             borderRadius: '3px',
+            maxWidth: '120px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
             '&:hover': { textDecoration: 'underline', textUnderlineOffset: '2px' },
           }}
         >

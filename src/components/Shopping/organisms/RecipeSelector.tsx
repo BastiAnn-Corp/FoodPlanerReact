@@ -48,8 +48,8 @@ export function RecipeSelector({ availableRecipes, selectedRecipes, onAdd, onRem
             }}
           />
         )}
-        renderOption={(props, recipe) => (
-          <Box component="li" {...props} sx={{ gap: 1.25, py: 1.25, px: 1.75 }}>
+        renderOption={({ key, ...props }, recipe) => (
+          <Box key={key} component="li" {...props} sx={{ gap: 1.25, py: 1.25, px: 1.75 }}>
             <Typography component="span" sx={{ fontSize: '1.375rem' }}>{recipe.emoji}</Typography>
             <Box sx={{ flex: 1 }}>
               <Typography variant="body2" fontWeight={500}>{recipe.name}</Typography>

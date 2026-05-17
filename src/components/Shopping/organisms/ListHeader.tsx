@@ -21,7 +21,7 @@ export function ListHeader({ isLoggedIn, listName, setListName, lists = [], curr
   const [switcherOpen, setSwitcher] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const currentList = lists.find(l => l.id === currentListId) ?? lists[0];
+  const currentList = lists.find(l => l.id === currentListId) ?? lists[0] ?? null;
 
   const startEdit = () => {
     if (!isLoggedIn) return;
@@ -84,7 +84,7 @@ export function ListHeader({ isLoggedIn, listName, setListName, lists = [], curr
             endIcon={<ExpandMoreRounded sx={{ fontSize: 15, color: 'text.secondary' }} />}
             disabled={!isLoggedIn}
           >
-            {currentList.shortName}
+            {currentList?.shortName ?? 'Mi lista'}
           </PillButton>
 
           {isLoggedIn && (
