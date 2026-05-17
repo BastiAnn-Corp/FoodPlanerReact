@@ -1,5 +1,5 @@
-import {DocumentData} from "@firebase/firestore";
-import {TAisle, TDaysMenu, TFoodFamily, TPotProgram, TRecipeSection, TSeasons} from "@/util/constants";
+import {DocumentData, Timestamp} from "@firebase/firestore";
+import {TAisle, TDaysMenu, TFoodFamily, TMeasureUnits, TPotProgram, TRecipeSection, TSeasons} from "@/util/constants";
 
 type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
   ? Acc[number]
@@ -82,4 +82,50 @@ export interface IShoppingCart extends DocumentData{
   menu: IMenu;
   persons: number;
   ingredients: IRecipeIngredient[];
+}
+
+// --- Shopping List models ---
+
+/** Ingredient snapshot stored inside IShoppingListRecipe.
+ *  Captured at the moment a recipe is added to the list so consolidation
+ *  can run without re-fetching the recipe catalog on subsequent page loads. */
+export interface IShoppingListIngredient {
+  ingredientId: string;
+  name: string;
+  aisles: TAisle[];
+  quantity: number;
+  quantity_unit: TMeasureUnits;
+}
+
+/** Recipe entry inside a shopping list.
+ *  Includes a full ingredient snapshot (denormalized). */
+export interface IShoppingListRecipe {
+  recipeId: string;
+  name: string;
+  family: TFoodFamily;               // used to derive emoji via foodFamilies constant
+  basePortions: number;              // original recipe portions (for scaling)
+  portions: number;                  // user-adjusted portion count
+  ingredients: IShoppingListIngredient[];
+}
+
+export interface IShoppingList extends DocumentData {
+  id?: string;
+  ownerUid: string;
+  name: string;
+  recipes: IShoppingListRecipe[];
+  checkedIngredientIds: string[];    // flat array — supports arrayUnion / arrayRemove
+  shareToken?: string;               // present once the list has been shared
+  updatedAt: Timestamp;
+  createdAt: Timestamp;
+}
+
+export interface ISharedListView extends DocumentData {
+  // Document ID IS the shareToken (crypto.randomUUID()).
+  // allow read: if true is safe because the token is unguessable.
+  ownerUid: string;
+  ownerDisplayName: string;          // snapshot of display name at share time
+  listId: string;                    // back-reference to shopping_lists document
+  name: string;                      // snapshot of list name at share time
+  recipes: IShoppingListRecipe[];    // full denormalized ingredient snapshot
+  updatedAt: Timestamp;
 }

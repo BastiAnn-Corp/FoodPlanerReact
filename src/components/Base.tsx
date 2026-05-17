@@ -46,8 +46,8 @@ const pages = [
     name: "Mi lista",
     route: "/shopping",
     icon: <ShoppingCartRounded/>,
-    enabled: false,
-    inBottomBar: false,
+    enabled: true,
+    inBottomBar: true,
   },
   {
     name: "Sobre la app",
