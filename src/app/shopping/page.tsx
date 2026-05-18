@@ -164,7 +164,7 @@ function ShoppingPageContent() {
         const { listRecipes: lr, checkedIngredientIds } = hydrateSavedList(recent);
         setListRecipes(lr);
         setCheckedIds(checkedIngredientIds);
-      });
+      }).catch(err => console.error("[Shopping] Failed to load lists:", err));
     }
     // pageMode === 'anonymous': stays empty, no-op
   }, [authLoading, user, pageMode, shareToken]);
