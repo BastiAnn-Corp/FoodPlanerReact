@@ -216,3 +216,35 @@ Recipients can check items off while shopping, but that state is held **in-memor
 | Owner renames the list | Reflected in `shared_list_views.listName` on next save |
 | Owner wants to revoke access | Delete the `shared_list_views/{shareToken}` document; the link 404s immediately |
 | Owner generates a new share link | A new `shareToken` is created; old token document can be deleted or left to expire |
+
+---
+
+## Known issues & fixes
+
+### BUG-01 — Recipe chips overflow horizontally on mobile (fixed in PR #8)
+
+**Symptom:** On small screens or narrow windows, selected recipe chips in the `RecipeSelector` formed a single horizontal row with hidden overflow scroll. This made chips unreachable and hid the remove button on the last chip.
+
+**Root cause:** The chip container had `flexWrap: { xs: 'nowrap', md: 'wrap' }` combined with `overflowX: 'auto'`, deliberately enabling horizontal scroll on mobile. This was a design decision that turned out to degrade usability.
+
+**Fix:** Replaced with `flexWrap: 'wrap'` on all breakpoints, removing the horizontal scroll entirely. Chips now wrap to new lines consistently regardless of screen size.
+
+**File changed:** `src/components/Shopping/organisms/RecipeSelector.tsx`
+
+---
+
+### BUG-02 — Saved lists not appearing in the list switcher (fixed in PR #8)
+
+**Symptom:** Logged-in users opened the "Mi lista" dropdown and saw no lists, even when lists existed in Firestore.
+
+**Root cause:** `getMostRecentList` and `getUserLists` in `shoppingLists.ts` combined `where("ownerUid", "==", uid)` with `orderBy("updatedAt", "desc")`. Firestore requires a **composite index** for queries that filter on one field and sort on a different one. That index was never deployed (the `firebase deploy` step failed with a 401 auth error during initial setup, and only the security rules were added manually). Without the index, both queries threw a Firestore error at runtime.
+
+The error was silently swallowed because the `Promise.all` in `page.tsx` had no `.catch()`, so `allLists` stayed `[]` and the switcher appeared empty with no feedback.
+
+**Fix (two parts):**
+1. Removed `orderBy` from both Firestore queries and replaced with client-side sorting by `updatedAt`. A plain `where` on a single field uses Firestore's automatic single-field index — no composite index required.
+2. Added `.catch(err => console.error(...))` to the `Promise.all` so future Firestore errors are visible in the browser console.
+
+**Files changed:** `src/lib/firebase/shoppingLists.ts`, `src/app/shopping/page.tsx`
+
+**Note on composite indexes:** Firestore security rules and composite indexes are deployed separately. Rules control access; indexes control query capability. Both must be present for a query to succeed. The `firebase deploy --only firestore` command deploys both from `firestore.rules` and `firestore.indexes.json` respectively — deploying only rules leaves indexes untouched.
