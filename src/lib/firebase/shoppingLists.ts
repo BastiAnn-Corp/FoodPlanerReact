@@ -20,8 +20,6 @@ import {
   deleteDoc,
   query,
   where,
-  orderBy,
-  limit,
   writeBatch,
   serverTimestamp,
   Timestamp,
@@ -56,13 +54,17 @@ function docToSharedView(data: Record<string, unknown>): ISharedListView {
 export async function getMostRecentList(uid: string): Promise<IShoppingList | null> {
   const q = query(
     collection(firestoreDB, LISTS_COLL),
-    where("ownerUid", "==", uid),
-    orderBy("updatedAt", "desc"),
-    limit(1)
+    where("ownerUid", "==", uid)
   );
   const snap = await getDocs(q);
   if (snap.empty) return null;
-  const d = snap.docs[0];
+  // Sort client-side — avoids requiring a composite index on (ownerUid, updatedAt)
+  const sorted = snap.docs.sort((a, b) => {
+    const aMs = (a.data().updatedAt as Timestamp)?.toMillis() ?? 0;
+    const bMs = (b.data().updatedAt as Timestamp)?.toMillis() ?? 0;
+    return bMs - aMs;
+  });
+  const d = sorted[0];
   return docToList(d.id, d.data() as Record<string, unknown>);
 }
 
@@ -70,11 +72,17 @@ export async function getMostRecentList(uid: string): Promise<IShoppingList | nu
 export async function getUserLists(uid: string): Promise<IShoppingList[]> {
   const q = query(
     collection(firestoreDB, LISTS_COLL),
-    where("ownerUid", "==", uid),
-    orderBy("updatedAt", "desc")
+    where("ownerUid", "==", uid)
   );
   const snap = await getDocs(q);
-  return snap.docs.map(d => docToList(d.id, d.data() as Record<string, unknown>));
+  // Sort client-side — avoids requiring a composite index on (ownerUid, updatedAt)
+  return snap.docs
+    .sort((a, b) => {
+      const aMs = (a.data().updatedAt as Timestamp)?.toMillis() ?? 0;
+      const bMs = (b.data().updatedAt as Timestamp)?.toMillis() ?? 0;
+      return bMs - aMs;
+    })
+    .map(d => docToList(d.id, d.data() as Record<string, unknown>));
 }
 
 /** Load a single list by its document ID. */

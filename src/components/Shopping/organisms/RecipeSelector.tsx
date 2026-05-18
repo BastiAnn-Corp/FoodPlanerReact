@@ -64,12 +64,9 @@ export function RecipeSelector({ availableRecipes, selectedRecipes, onAdd, onRem
           sx={{
             display: 'flex',
             gap: 1,
-            overflowX: 'auto',
             pt: 1.25,
             pb: 0.25,
-            flexWrap: { xs: 'nowrap', md: 'wrap' },
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': { display: 'none' },
+            flexWrap: 'wrap',
           }}
         >
           {selectedRecipes.map(r => (
