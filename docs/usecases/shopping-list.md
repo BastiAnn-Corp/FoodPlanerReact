@@ -6,6 +6,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-1 — View shopping page (anonymous)
 
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:ShoppingPageContent (pageMode === "anonymous" + AnonBanner) -->
+**See:** ADR-06
+
 **GIVEN** a user is not logged in and navigates to `/shopping`  
 **WHEN** the page loads  
 **THEN** they see an empty list with a prompt to add recipes, and a banner saying "Log in to save your list across sessions"
@@ -13,6 +16,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-2 — View shopping page (logged user, returning)
+
+**Status:** `DONE` <!-- src/lib/firebase/shoppingLists.ts:getMostRecentList; src/app/shopping/page.tsx useEffect "owner" branch -->
+**See:** ADR-04, ADR-06, ADR-07
 
 **GIVEN** a logged user navigates to `/shopping`  
 **WHEN** the page loads  
@@ -22,6 +28,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-3 — Add recipes to the list
 
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:addRecipe; src/util/shoppingListUtils.ts:recipeToShoppingListRecipe -->
+**See:** ADR-05
+
 **GIVEN** a user is on `/shopping`  
 **WHEN** they search and select one or more recipes from the selector  
 **THEN** the recipes appear as chips at the top of the page and the ingredient list updates immediately
@@ -29,6 +38,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-4 — Adjust portions per recipe
+
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:changePortions; src/util/shoppingListUtils.ts:scaleIngredient -->
 
 **GIVEN** a user has added a recipe to the list  
 **WHEN** they change the portion multiplier (e.g. ×2) on that recipe's chip  
@@ -38,6 +49,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-5 — Remove a recipe from the list
 
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:removeRecipe -->
+
 **GIVEN** a user has recipes in their list  
 **WHEN** they dismiss a recipe chip  
 **THEN** the consolidated ingredient list recalculates removing that recipe's contribution
@@ -45,6 +58,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-6 — Metric unit consolidation
+
+**Status:** `DONE` <!-- src/util/shoppingListUtils.ts:resolveQty + toGrams/toMl/formatMass/formatVolume -->
 
 **GIVEN** the same ingredient appears across recipes with compatible metric units (`grs`/`kg` or `ml`/`lt`)  
 **WHEN** the list is rendered  
@@ -54,6 +69,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-7 — Mixed unit merging (same ingredient, incompatible units)
 
+**Status:** `DONE` <!-- src/util/shoppingListUtils.ts:resolveQty mixed-group branch (joins parts with " + ") -->
+
 **GIVEN** the same ingredient appears in two recipes with incompatible units (e.g. `300grs` and `2 unidades`)  
 **WHEN** the list is rendered  
 **THEN** both quantities are shown on a single line: "Tomatoes — 300g + 2 units" (no forced conversion)
@@ -61,6 +78,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-8 — Non-metric units left as-is
+
+**Status:** `DONE` <!-- src/util/shoppingListUtils.ts:resolveQty culinary/count groups -->
 
 **GIVEN** an ingredient uses `cdta`, `cda`, `tz`, or `unidad`  
 **WHEN** the same ingredient appears multiple times with the same non-metric unit  
@@ -70,6 +89,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-9 — Sort by aisle (default)
 
+**Status:** `DONE` <!-- src/util/shoppingListUtils.ts:buildAisles (sortMode 'aisle' grouped by marketAisles); src/components/Shopping/organisms/AisleGroup.tsx -->
+
 **GIVEN** a user has a populated shopping list  
 **WHEN** the list renders (or they select "By aisle" sort)  
 **THEN** ingredients are grouped under collapsible aisle headers, ordered to match a logical supermarket walk
@@ -77,6 +98,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-10 — Check off items while shopping
+
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:toggleIngredient; src/lib/firebase/shoppingLists.ts:updateChecked -->
+**See:** ADR-03, ADR-06
 
 **GIVEN** a user is viewing their shopping list  
 **WHEN** they tap a checkbox next to an ingredient  
@@ -86,6 +110,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-11 — Clear list and start over (logged user)
 
+**Status:** `PARTIAL — handleClear logic exists in page.tsx but is not wired to any UI; ActionBar has no Clear button and no confirmation dialog component exists` <!-- src/app/shopping/page.tsx:handleClear (defined but unreferenced); src/components/Shopping/organisms/ActionBar.tsx (no onClear prop); no ClearListDialog under src/components/Shopping/dialogs/ -->
+
 **GIVEN** a logged user has an existing list  
 **WHEN** they tap "Clear list" and confirm  
 **THEN** the current list is wiped (recipes and check-off state reset) and they start fresh — no new list is created, the same list object is reused
@@ -93,6 +119,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-12 — Multiple saved lists (logged user)
+
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:handleNewList + handleSelectList; src/components/Shopping/dialogs/ListSwitcherModal.tsx; src/lib/firebase/shoppingLists.ts:createList + getUserLists -->
+**See:** ADR-04, ADR-07
 
 **GIVEN** a logged user wants to plan for different occasions  
 **WHEN** they tap "New list"  
@@ -102,6 +131,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-13 — Share list (read-only + checkable)
 
+**Status:** `DONE` <!-- src/lib/firebase/shoppingLists.ts:shareList (writeBatch updates shopping_lists + creates shared_list_views/{token}); src/app/shopping/page.tsx:handleShare; src/components/Shopping/dialogs/ShareDialog.tsx -->
+**See:** ADR-01, ADR-03
+
 **GIVEN** a logged user has a list they want to share  
 **WHEN** they tap "Share" and copy the generated link  
 **THEN** a link is generated in the form `https://bastiann-corp.github.io/FoodPlanerReact/shopping?token=<shareToken>` and anyone with that link can open it, see the full ingredient list, and check items off — but cannot add/remove recipes or edit quantities
@@ -110,6 +142,9 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ## UC-13b — Shared list stays in sync
 
+**Status:** `PARTIAL — saveList calls syncSharedView via a sequential await rather than a single writeBatch, so the canonical list and shared snapshot are not written atomically` <!-- src/lib/firebase/shoppingLists.ts:saveList (setDoc/addDoc, then await syncSharedView with updateDoc — two separate round-trips, not batched) -->
+**See:** ADR-02
+
 **GIVEN** a logged user has shared a list and later modifies it (adds/removes recipes, changes portions)  
 **WHEN** they save the list  
 **THEN** the shared view is updated atomically in the same write — any recipient who refreshes their link sees the current state immediately, with no action required from the owner
@@ -117,6 +152,8 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ---
 
 ## UC-14 — Export to clipboard (Google Keep format)
+
+**Status:** `DONE` <!-- src/app/shopping/page.tsx:handleCopy; src/util/shoppingListUtils.ts:buildKeepText -->
 
 **GIVEN** a user has a shopping list  
 **WHEN** they tap "Copy for Keep"  
@@ -223,6 +260,8 @@ Recipients can check items off while shopping, but that state is held **in-memor
 
 ### BUG-01 — Recipe chips overflow horizontally on mobile (fixed in PR #8)
 
+**Status:** `FIXED in PR #8 (e7e8832)` <!-- src/components/Shopping/organisms/RecipeSelector.tsx (flexWrap: 'wrap') -->
+
 **Symptom:** On small screens or narrow windows, selected recipe chips in the `RecipeSelector` formed a single horizontal row with hidden overflow scroll. This made chips unreachable and hid the remove button on the last chip.
 
 **Root cause:** The chip container had `flexWrap: { xs: 'nowrap', md: 'wrap' }` combined with `overflowX: 'auto'`, deliberately enabling horizontal scroll on mobile. This was a design decision that turned out to degrade usability.
@@ -234,6 +273,9 @@ Recipients can check items off while shopping, but that state is held **in-memor
 ---
 
 ### BUG-02 — Saved lists not appearing in the list switcher (fixed in PR #8)
+
+**Status:** `FIXED in PR #8 (fdbc20a)` <!-- src/lib/firebase/shoppingLists.ts:getUserLists + getMostRecentList (orderBy removed, client-side sort by updatedAt); src/app/shopping/page.tsx Promise.all .catch added -->
+**See:** ADR-04
 
 **Symptom:** Logged-in users opened the "Mi lista" dropdown and saw no lists, even when lists existed in Firestore.
 
