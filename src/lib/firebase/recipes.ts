@@ -6,9 +6,12 @@ import {
   doc,
   FirestoreError,
   getDoc,
+  limit,
   orderBy,
   query,
-  Query, updateDoc,
+  Query,
+  serverTimestamp,
+  updateDoc,
   where
 } from "@firebase/firestore";
 import {createDocOutput, getConvertedDocs} from "@/lib/firebase/firestore";
@@ -85,6 +88,20 @@ export async function getRecipes({id, name, season, family} : IFilterRecipes) : 
   }
 }
 
+/** Fetch the N most recently created recipes (ordered by `createdAt` desc).
+ *  Recipes missing `createdAt` are excluded by Firestore — treated as the oldest. */
+export async function getLatestRecipes(n: number = 7) : Promise<IRecipe[]> {
+  try {
+    const recipes = await getConvertedDocs({
+      coll: {collection: collName, converter},
+      queryFilters: (q: Query): Query => query(q, orderBy("createdAt", "desc"), limit(n))
+    })
+    return recipes.map((doc) => doc as IRecipe)
+  } catch (error) {
+    return []
+  }
+}
+
 
 export interface ICreateRecipeInput {
   name: string;
@@ -111,7 +128,11 @@ export function validateRecipeCreation(args: ICreateRecipeInput) : boolean {
 
 export async function createRecipe(args: ICreateRecipeInput): Promise<createDocOutput> {
   try {
-    const data : IRecipe = args
+    const data = {
+      ...args,
+      createdAt: serverTimestamp(),
+      modifiedAt: serverTimestamp(),
+    }
     const docRef = await addDoc(
       collection(firestoreDB, collName),
       data
@@ -140,7 +161,7 @@ export async function deleteRecipe(documentId:string): Promise<string> {
 export async function updateRecipe(recipe:IRecipe): Promise<IRecipe | undefined> {
   try {
     const docRef = doc(firestoreDB, collName, recipe.id!);
-    const result = await updateDoc(docRef, recipe)
+    const result = await updateDoc(docRef, {...recipe, modifiedAt: serverTimestamp()})
     return getRecipeById(recipe.id!)
   } catch (error) {
     const err = error as FirestoreError;
@@ -153,7 +174,7 @@ export async function updateRecipeIngredients(docId: string, ingredients:IRecipe
   try {
     console.debug(`Updating recipe ${docId}:`, ingredients)
     const docRef = doc(firestoreDB, collName, docId);
-    await updateDoc(docRef, {ingredients_list: ingredients}).then((res)=>{
+    await updateDoc(docRef, {ingredients_list: ingredients, modifiedAt: serverTimestamp()}).then((res)=>{
       console.debug('Receta actualizada', res)
     }).catch((e)=>{
       console.error(`Error: ${e.name}: ${e.message}`);
