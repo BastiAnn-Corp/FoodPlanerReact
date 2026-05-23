@@ -13,6 +13,7 @@ import {IRecipe} from "@/util/models";
 import {foodFamilies, seasons} from "@/util/constants";
 import {getRecipes} from "@/lib/firebase/recipes";
 import {AccordionRecipe} from "@/components/Recipe/AccordeonRecipe";
+import {LatestRecipesStrip} from "@/components/Recipe/LatestRecipesStrip";
 import {envVars} from "@/util/config";
 
 
@@ -116,6 +117,7 @@ export default function Recipes() {
         >Nueva receta</Button>
       </Grid2>
     </Grid2>
+    <LatestRecipesStrip />
     <Grid2 container spacing={2} direction={"row"} columns={{ xs: 6, sm: 6, md: 12, lg:12, xl:12 }} paddingBottom={10}>
       <Grid2 size={{xs: 6, sm: 6, md: 2, lg:2, xl:2}}>
         <TextField

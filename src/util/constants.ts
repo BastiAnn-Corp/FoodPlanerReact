@@ -264,3 +264,18 @@ export const recipeSections: ICategory[] = [
   {id:'once', name:'Once'},
   {id:'cena', name:'Cena'},
 ]
+
+// Per-family accent colors used by the latest recipes strip cards.
+// Values mirror the MUI palette in src/styles/theme.ts so they stay in sync.
+export const FAMILY_ACCENTS: Record<TFoodFamily, string> = {
+  starters: '#008395', // info.main
+  veggies:  '#7cb342', // primary.main
+  carbs:    '#b9a440', // warning.main
+  fish:     '#008395', // info.main
+  birds:    '#ff8f00', // secondary.main
+  meat:     '#a64529', // error.main
+  beans:    '#7cb342', // primary.main
+  desserts: '#a64529', // error.main
+  bakery:   '#b9a440', // warning.main
+  others:   '#7cb342', // primary.main
+}

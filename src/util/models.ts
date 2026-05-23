@@ -56,6 +56,8 @@ export interface IRecipe extends DocumentData{
   notes?: string;
   creator?: string;
   editors?: string[];
+  createdAt?: Timestamp;
+  modifiedAt?: Timestamp;
 }
 
 export interface IMenuRecipe {

@@ -26,6 +26,8 @@
 *.pem
 */firebase-config.ts
 .claude/settings.local.json
+.claude/launch.json
+nul
 
 # debug
 npm-debug.log*
