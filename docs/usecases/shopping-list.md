@@ -162,6 +162,17 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 
 ---
 
+## UC-15 — Guest view shows recipe composition
+
+**Status:** `DONE` <!-- src/components/Shopping/organisms/ReadonlyRecipes.tsx; src/components/Shopping/molecules/ReadonlyRecipeChip.tsx; src/app/shopping/page.tsx:leftPanel (readonly branch) -->
+**See:** ADR-09
+
+**GIVEN** a guest (anonymous recipient) opens a shared list link  
+**WHEN** the page loads, on both desktop and mobile  
+**THEN** a "Recetas en esta lista · N" section appears below the owner header, listing each recipe (emoji, name, portion count) as an inert pill — tapping a name opens the same read-only ingredient breakdown modal the owner uses, but there is no add/remove/portion-stepper control, since guests cannot edit the list
+
+---
+
 ## Notes
 
 ### Unit consolidation rules

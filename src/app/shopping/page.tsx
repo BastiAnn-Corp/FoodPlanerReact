@@ -12,6 +12,7 @@ import { AisleGroup } from "@/components/Shopping/organisms/AisleGroup";
 import { EmptyState } from "@/components/Shopping/organisms/EmptyState";
 import { CelebrationBanner } from "@/components/Shopping/organisms/CelebrationBanner";
 import { ReadonlyHeader } from "@/components/Shopping/organisms/ReadonlyHeader";
+import { ReadonlyRecipes } from "@/components/Shopping/organisms/ReadonlyRecipes";
 import { ShareDialog } from "@/components/Shopping/dialogs/ShareDialog";
 import { PageMode, SavedList, ShoppingRecipe, SortMode } from "@/components/Shopping/types";
 import { useAuth } from "@/hooks/useAuth";
@@ -332,11 +333,14 @@ function ShoppingPageContent() {
 
   const leftPanel =
     pageMode === "readonly" ? (
-      <ReadonlyHeader
-        ownerName={sharedMeta?.ownerName ?? ""}
-        ownerInitials={sharedMeta?.ownerInitials ?? ""}
-        listName={listName}
-      />
+      <>
+        <ReadonlyHeader
+          ownerName={sharedMeta?.ownerName ?? ""}
+          ownerInitials={sharedMeta?.ownerInitials ?? ""}
+          listName={listName}
+        />
+        <ReadonlyRecipes recipes={selRecipes} getIngredientDetails={getIngredientDetails} />
+      </>
     ) : (
       <>
         <ListHeader
