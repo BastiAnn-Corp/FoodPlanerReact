@@ -154,10 +154,11 @@ Feature: A dedicated `/shopping` page where users select recipes and receive a c
 ## UC-14 — Export to clipboard (Google Keep format)
 
 **Status:** `DONE` <!-- src/app/shopping/page.tsx:handleCopy; src/util/shoppingListUtils.ts:buildKeepText -->
+**See:** ADR-08
 
 **GIVEN** a user has a shopping list  
 **WHEN** they tap "Copy for Keep"  
-**THEN** the clipboard receives one line per ingredient in the format `[ ] 1.5 kg Tomatoes`, which Google Keep converts to checkboxes on paste
+**THEN** the clipboard receives one line per unchecked ingredient in the format `1.5 kg Tomatoes`; already-checked items are omitted
 
 ---
 
