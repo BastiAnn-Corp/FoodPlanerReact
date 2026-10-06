@@ -329,11 +329,12 @@ export function getRecipeIngredientDetails(
 // Google Keep export
 // ---------------------------------------------------------------------------
 
-/** Format aisles as Google Keep checkbox text (UC-14). */
+/** Format unchecked items as plain lines for Google Keep paste (UC-14). */
 export function buildKeepText(aisles: ShoppingAisle[]): string {
   return aisles
     .flatMap(a => a.items)
-    .map(item => `[ ] ${item.qty} ${item.name}`)
+    .filter(item => !item.checked)
+    .map(item => `${item.qty} ${item.name}`)
     .join("\n");
 }
 
